@@ -8,34 +8,39 @@ import { getDb } from '../../../../lib/db';
 import { getSession } from '../../../../lib/auth';
 import { ClaimForm } from './ClaimForm';
 
-export const metadata = { title: 'Claim listing — datasetai.xyz' };
+export const metadata = { title: 'Claim listing' };
 
-export default async function ClaimPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ClaimPage({
+  params,
+}: {
+  params: Promise<{ slug: string[] }>;
+}) {
   const { slug } = await params;
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
   const session = await getSession();
-  if (!session) redirect(`/api/auth/github?next=/agents/${encodeURIComponent(slug)}/claim`);
+  if (!session) redirect(`/api/auth/github?next=/agents/${agentId}/claim`);
   const db = getDb();
-  if (!db) return <main>Database not configured.</main>;
-  const [agent] = await db.select().from(agents).where(eq(agents.id, slug)).limit(1);
+  if (!db) return <p>Database not configured.</p>;
+  const [agent] = await db.select().from(agents).where(eq(agents.id, agentId)).limit(1);
   if (!agent) notFound();
   if (agent.creatorId) {
     return (
-      <main className="space-y-3">
+      <div className="space-y-3">
         <h1 className="text-2xl font-bold">Already claimed</h1>
-        <p className="text-neutral-500">This listing already has an owner.</p>
-      </main>
+        <p className="text-muted-foreground">This listing already has an owner.</p>
+      </div>
     );
   }
   return (
-    <main className="space-y-4">
+    <div className="space-y-4">
       <header>
         <h1 className="text-2xl font-bold">Claim {agent.name}</h1>
-        <p className="text-sm text-neutral-500">
+        <p className="text-sm text-muted-foreground">
           We&apos;ll verify your GitHub ownership against {agent.sourceUrl ?? 'the upstream'} before
           transferring control.
         </p>
       </header>
-      <ClaimForm slug={slug} />
-    </main>
+      <ClaimForm slug={agentId} />
+    </div>
   );
 }

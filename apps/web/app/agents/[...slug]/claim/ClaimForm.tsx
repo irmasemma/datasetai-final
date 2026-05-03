@@ -13,7 +13,7 @@ export function ClaimForm({ slug }: { slug: string }) {
     setSubmitting(true);
     setErr(null);
     try {
-      const res = await fetch(`/api/v1/agents/${encodeURIComponent(slug)}/claim`, {
+      const res = await fetch(`/api/v1/agents/${slug}/claim`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ proof }),
@@ -41,14 +41,14 @@ export function ClaimForm({ slug }: { slug: string }) {
           rows={3}
           value={proof}
           onChange={(e) => setProof(e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-300 bg-white p-2 dark:border-neutral-700 dark:bg-neutral-900"
+          className="mt-1 w-full rounded border border-border bg-card p-2 text-foreground placeholder:text-muted-foreground"
         />
       </label>
       {err && <p className="text-sm text-red-600">{err}</p>}
       <button
         type="submit"
         disabled={submitting}
-        className="rounded bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-900"
+        className="rounded bg-foreground px-3 py-1.5 text-sm font-medium text-background disabled:opacity-50"
       >
         {submitting ? 'Submitting…' : 'Submit claim'}
       </button>

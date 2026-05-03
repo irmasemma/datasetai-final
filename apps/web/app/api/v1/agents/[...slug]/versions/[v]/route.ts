@@ -9,9 +9,10 @@ import { getSession } from '../../../../../../../lib/auth';
 
 export async function DELETE(
   _req: Request,
-  ctx: { params: Promise<{ slug: string; v: string }> },
+  ctx: { params: Promise<{ slug: string[]; v: string }> },
 ): Promise<Response> {
   const { slug, v } = await ctx.params;
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();
@@ -20,6 +21,6 @@ export async function DELETE(
   await db
     .update(agentVersions)
     .set({ unpublishedAt: new Date() })
-    .where(and(eq(agentVersions.agentId, slug), eq(agentVersions.version, v)));
+    .where(and(eq(agentVersions.agentId, agentId), eq(agentVersions.version, v)));
   return NextResponse.json({ ok: true });
 }

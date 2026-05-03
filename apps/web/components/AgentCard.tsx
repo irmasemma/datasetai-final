@@ -17,23 +17,23 @@ export function AgentCard({ agent }: { agent: AgentCardData }) {
   return (
     <Link
       href={`/agents/${agent.id}`}
-      className="group block rounded-lg border border-neutral-200 bg-white p-5 transition-colors hover:border-neutral-400 dark:border-neutral-800 dark:bg-neutral-950 dark:hover:border-neutral-600"
+      className="group block rounded-lg border border-border bg-card p-5 transition-colors hover:border-brand-500/50"
     >
       <div className="flex items-start justify-between gap-3">
-        <h3 className="text-base font-semibold text-neutral-900 group-hover:underline dark:text-neutral-50">
+        <h3 className="text-base font-semibold text-foreground group-hover:underline">
           {agent.name}
         </h3>
         <div className="flex flex-col items-end gap-1">
-          <span className="rounded bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+          <span className="rounded bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
             {FORMAT_LABEL[agent.primaryFormat] ?? agent.primaryFormat}
           </span>
           <SourceBadge source={agent.sourceType} />
         </div>
       </div>
-      <p className="mt-2 line-clamp-2 text-sm text-neutral-600 dark:text-neutral-400">
+      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
         {agent.description}
       </p>
-      <div className="mt-4 flex items-center justify-between text-xs text-neutral-500">
+      <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
         <span>
           {agent.creatorLogin
             ? `by ${agent.creatorLogin}`
@@ -47,16 +47,16 @@ export function AgentCard({ agent }: { agent: AgentCardData }) {
         {tools.map((t) => (
           <span
             key={t}
-            className="rounded border border-neutral-200 px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+            className="rounded border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wide text-muted-foreground"
           >
             {t}
           </span>
         ))}
         {moreTools > 0 && (
-          <span className="text-[10px] text-neutral-400">+{moreTools} more</span>
+          <span className="text-[10px] text-muted-foreground/70">+{moreTools} more</span>
         )}
         {agent.license && (
-          <span className="ml-auto text-[10px] text-neutral-400">{agent.license}</span>
+          <span className="ml-auto text-[10px] text-muted-foreground/70">{agent.license}</span>
         )}
       </div>
     </Link>

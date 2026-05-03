@@ -15,15 +15,16 @@ import {
 export const revalidate = 60;
 
 interface Params {
-  slug: string;
+  slug: string[];
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const result = await getAgentBySlug(slug);
-  if (!result) return { title: 'Agent not found — datasetai.xyz' };
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const result = await getAgentBySlug(agentId);
+  if (!result) return { title: 'Agent not found' };
   return {
-    title: `${result.card.name} — datasetai.xyz`,
+    title: result.card.name,
     description: result.card.description,
     openGraph: {
       title: result.card.name,
@@ -36,20 +37,21 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
       description: result.card.description,
     },
     alternates: {
-      canonical: `/agents/${slug}`,
+      canonical: `/agents/${agentId}`,
     },
   };
 }
 
 export default async function ListingPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const result = await getAgentBySlug(slug);
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const result = await getAgentBySlug(agentId);
   if (!result) notFound();
 
   const db = getDb();
   if (db) {
     try {
-      await recordListingView(db, { agentId: slug });
+      await recordListingView(db, { agentId });
     } catch {
       // listing_views is best-effort
     }
@@ -59,10 +61,10 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
   const installCmd = `npx datasetai install ${card.id}`;
 
   return (
-    <main className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_18rem]">
+    <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_18rem]">
       <JsonLd
         data={[
-          softwareApplicationJsonLd(card),
+          softwareApplicationJsonLd(card, versions[0]?.version),
           breadcrumbJsonLd([
             { name: 'Home', url: '/' },
             { name: 'Agents', url: '/agents' },
@@ -73,19 +75,19 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
       <article className="space-y-6">
         <header className="space-y-3">
           <div className="flex items-center gap-2">
-            <p className="text-xs uppercase tracking-wide text-neutral-500">{card.primaryFormat}</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">{card.primaryFormat}</p>
             <SourceBadge source={card.sourceType} />
             {creator?.isVerifiedPublisher && <VerifiedBadge />}
           </div>
           <h1 className="text-3xl font-bold tracking-tight">{card.name}</h1>
-          <p className="text-lg text-neutral-600 dark:text-neutral-400">{card.description}</p>
+          <p className="text-lg text-muted-foreground">{card.description}</p>
         </header>
 
         {card.sourceType !== 'direct-publish' && (
           <div className="rounded border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-200">
             Mirrored from <strong>{card.sourceType}</strong>{' '}
             <Link
-              href={`/agents/${encodeURIComponent(slug)}/claim`}
+              href={`/agents/${agentId}/claim`}
               className="underline"
             >
               Claim this listing
@@ -102,7 +104,7 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">README</h2>
-          <div className="prose max-w-none rounded border border-neutral-200 bg-white p-6 text-neutral-800 dark:prose-invert dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200">
+          <div className="prose max-w-none rounded border border-border bg-card p-6 text-foreground dark:prose-invert">
             <p>{card.description}</p>
             <p>
               This listing supports the following tools:{' '}
@@ -117,14 +119,14 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">Versions</h2>
-          <ul className="divide-y divide-neutral-200 rounded border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-950">
+          <ul className="divide-y divide-border rounded border border-border bg-card">
             {versions.map((v) => (
               <li
                 key={v.version}
                 className="flex items-center justify-between px-4 py-2 text-sm"
               >
                 <span className="font-mono">{v.version}</span>
-                <span className="text-neutral-500">
+                <span className="text-muted-foreground">
                   {new Date(v.publishedAt).toISOString().slice(0, 10)}
                 </span>
               </li>
@@ -134,32 +136,32 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
       </article>
 
       <aside className="space-y-6">
-        <section className="rounded border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+        <section className="rounded border border-border bg-card p-4">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Install
           </h3>
-          <pre className="mt-2 overflow-x-auto rounded bg-neutral-900 p-3 text-xs text-neutral-100">
+          <pre className="mt-2 overflow-x-auto rounded bg-foreground p-3 text-xs text-background">
             {installCmd}
           </pre>
         </section>
 
-        <section className="space-y-2 rounded border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+        <section className="space-y-2 rounded border border-border bg-card p-4">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Stats
           </h3>
           <dl className="grid grid-cols-2 gap-2 text-sm">
-            <dt className="text-neutral-500">30-day installs</dt>
+            <dt className="text-muted-foreground">30-day installs</dt>
             <dd className="text-right">{card.installCount30d.toLocaleString()}</dd>
-            <dt className="text-neutral-500">Lifetime</dt>
+            <dt className="text-muted-foreground">Lifetime</dt>
             <dd className="text-right">{card.installCountLifetime.toLocaleString()}</dd>
-            <dt className="text-neutral-500">License</dt>
+            <dt className="text-muted-foreground">License</dt>
             <dd className="text-right">{card.license ?? '—'}</dd>
           </dl>
         </section>
 
         {creator && (
-          <section className="space-y-2 rounded border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+          <section className="space-y-2 rounded border border-border bg-card p-4">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Creator
             </h3>
             <Link
@@ -168,20 +170,20 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
             >
               {creator.displayName}
               {creator.isVerifiedPublisher && (
-                <span className="ml-2 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+                <span className="ml-2 rounded bg-brand-500/15 px-1.5 py-0.5 text-[10px] font-medium text-brand-500">
                   verified
                 </span>
               )}
             </Link>
             {creator.bio && (
-              <p className="text-sm text-neutral-500">{creator.bio}</p>
+              <p className="text-sm text-muted-foreground">{creator.bio}</p>
             )}
           </section>
         )}
 
         {card.tags.length > 0 && (
           <section className="space-y-2">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
               Tags
             </h3>
             <div className="flex flex-wrap gap-1.5">
@@ -189,7 +191,7 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
                 <Link
                   key={t}
                   href={`/tags/${encodeURIComponent(t)}`}
-                  className="rounded border border-neutral-200 px-1.5 py-0.5 text-xs text-neutral-600 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-900"
+                  className="rounded border border-border px-1.5 py-0.5 text-xs text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   #{t}
                 </Link>
@@ -198,6 +200,6 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
           </section>
         )}
       </aside>
-    </main>
+    </div>
   );
 }

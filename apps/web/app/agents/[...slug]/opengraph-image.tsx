@@ -7,16 +7,17 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 interface Params {
-  slug: string;
+  slug: string[];
 }
 
 export default async function AgentOG({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
-  const result = await getAgentBySlug(slug);
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const result = await getAgentBySlug(agentId);
 
   const name = result?.card.name ?? 'Agent not found';
   const description = result?.card.description ?? '';
-  const installCmd = `npx datasetai install ${slug}`;
+  const installCmd = `npx datasetai install ${agentId}`;
   const format = result?.card.primaryFormat ?? '';
   const installs = result?.card.installCountLifetime ?? 0;
   const creator = result?.creator?.displayName ?? null;

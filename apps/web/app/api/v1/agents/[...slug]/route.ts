@@ -17,16 +17,17 @@ interface PatchBody {
 
 export async function PATCH(
   req: Request,
-  ctx: { params: Promise<{ slug: string }> },
+  ctx: { params: Promise<{ slug: string[] }> },
 ): Promise<Response> {
   const { slug } = await ctx.params;
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();
   if (!db) return NextResponse.json({ error: 'DB_NOT_CONFIGURED' }, { status: 503 });
   const body = (await req.json()) as PatchBody;
 
-  const [existing] = await db.select().from(agents).where(eq(agents.id, slug)).limit(1);
+  const [existing] = await db.select().from(agents).where(eq(agents.id, agentId)).limit(1);
   if (!existing) return NextResponse.json({ error: 'NOT_FOUND' }, { status: 404 });
   if (existing.creatorId && existing.creatorId !== session.userId && !session.isAdmin) {
     return NextResponse.json({ error: 'FORBIDDEN' }, { status: 403 });
@@ -39,6 +40,6 @@ export async function PATCH(
   if (body.category !== undefined) update['category'] = body.category;
   if (body.tags !== undefined) update['tags'] = [...body.tags];
 
-  await db.update(agents).set(update).where(eq(agents.id, slug));
+  await db.update(agents).set(update).where(eq(agents.id, agentId));
   return NextResponse.json({ ok: true });
 }

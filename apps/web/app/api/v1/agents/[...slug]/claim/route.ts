@@ -13,21 +13,22 @@ interface Body {
 
 export async function POST(
   req: Request,
-  ctx: { params: Promise<{ slug: string }> },
+  ctx: { params: Promise<{ slug: string[] }> },
 ): Promise<Response> {
   const { slug } = await ctx.params;
+  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();
   if (!db) return NextResponse.json({ error: 'DB_NOT_CONFIGURED' }, { status: 503 });
   const body = (await req.json().catch(() => ({}))) as Body;
-  const [agent] = await db.select().from(agents).where(eq(agents.id, slug)).limit(1);
+  const [agent] = await db.select().from(agents).where(eq(agents.id, agentId)).limit(1);
   if (!agent) return NextResponse.json({ error: 'NOT_FOUND' }, { status: 404 });
   if (agent.creatorId) {
     return NextResponse.json({ error: 'ALREADY_CLAIMED' }, { status: 409 });
   }
   await db.insert(claimRequests).values({
-    agentId: slug,
+    agentId,
     claimerUserId: session.userId,
     githubProof: body.proof ?? null,
   });
