@@ -3,6 +3,8 @@ import { listAgents, listCategories } from '../lib/catalog';
 import { CatalogGrid } from '../components/CatalogGrid';
 import { Filters } from '../components/Filters';
 import { TerminalHero } from '../components/TerminalHero';
+import { TrustStrip } from '../components/TrustStrip';
+import { TrendingRail } from '../components/TrendingRail';
 
 export const revalidate = 60;
 
@@ -19,7 +21,21 @@ export default async function HomePage(props: {
     sort: ((params['sort'] ?? 'most-installed') as 'most-installed' | 'recent' | 'relevance'),
     limit: 20,
   };
-  const [agents, categories] = await Promise.all([listAgents(filters), listCategories()]);
+  const [agents, categories, trending, recentlyUpdated, allForStats] = await Promise.all([
+    listAgents(filters),
+    listCategories(),
+    listAgents({ limit: 4, sort: 'most-installed' }),
+    listAgents({ limit: 4, sort: 'recent' }),
+    listAgents({ limit: 5000, sort: 'most-installed' }),
+  ]);
+
+  const stats = {
+    agents: allForStats.length,
+    publishers: new Set(
+      allForStats.map((a) => a.creatorLogin).filter((l): l is string => Boolean(l)),
+    ).size,
+    installs30d: allForStats.reduce((acc, a) => acc + a.installCount30d, 0),
+  };
 
   return (
     <main className="space-y-16">
@@ -75,11 +91,29 @@ export default async function HomePage(props: {
         </div>
       </section>
 
+      <TrustStrip stats={stats} />
+
+      <TrendingRail
+        title="Trending this month"
+        subtitle="Most installed in the last 30 days"
+        href="/agents?sort=most-installed"
+        agents={trending}
+        emptyLabel="No trending agents yet — check back as the catalog grows."
+      />
+
+      <TrendingRail
+        title="Recently updated"
+        subtitle="Fresh versions and new releases"
+        href="/agents?sort=recent"
+        agents={recentlyUpdated}
+        emptyLabel="No recent updates yet."
+      />
+
       <section className="grid grid-cols-1 gap-8 lg:grid-cols-[16rem_1fr]">
         <Filters basePath="/" current={params} categories={categories} />
         <div className="space-y-4">
           <div className="flex items-baseline justify-between">
-            <h2 className="text-xl font-semibold">Latest agents</h2>
+            <h2 className="text-xl font-semibold">Browse the full catalog</h2>
             <Link
               href="/agents"
               className="text-sm text-muted-foreground hover:text-foreground"
