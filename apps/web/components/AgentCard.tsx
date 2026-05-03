@@ -53,10 +53,10 @@ export function AgentCard({ agent }: { agent: AgentCardData }) {
           </span>
         ))}
         {moreTools > 0 && (
-          <span className="text-[10px] text-muted-foreground/70">+{moreTools} more</span>
+          <span className="text-[10px] text-muted-foreground">+{moreTools} more</span>
         )}
         {agent.license && (
-          <span className="ml-auto text-[10px] text-muted-foreground/70">{agent.license}</span>
+          <span className="ml-auto text-[10px] text-muted-foreground">{agent.license}</span>
         )}
       </div>
     </Link>

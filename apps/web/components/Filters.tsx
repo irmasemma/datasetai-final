@@ -67,7 +67,7 @@ export function Filters(props: {
             href={buildUrl(basePath, current, { category: c.category })}
             active={current['category'] === c.category}
           >
-            {c.category} <span className="text-muted-foreground/70">({c.count})</span>
+            {c.category} <span className="text-muted-foreground">({c.count})</span>
           </FilterLink>
         ))}
       </FilterGroup>
