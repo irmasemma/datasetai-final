@@ -64,6 +64,7 @@ export default function OG() {
         >
           <div
             style={{
+              display: 'flex',
               fontSize: 92,
               fontWeight: 800,
               fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -95,6 +96,7 @@ export default function OG() {
 
           <div
             style={{
+              display: 'flex',
               fontSize: 22,
               color: '#a3a3a3',
               fontFamily: 'system-ui, -apple-system, sans-serif',

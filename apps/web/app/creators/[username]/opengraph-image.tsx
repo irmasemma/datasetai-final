@@ -68,6 +68,7 @@ export default async function CreatorOG({ params }: { params: Promise<Params> })
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div
             style={{
+              display: 'flex',
               fontSize: 22,
               color: '#737373',
               fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -92,6 +93,7 @@ export default async function CreatorOG({ params }: { params: Promise<Params> })
             {verified && (
               <span
                 style={{
+                  display: 'flex',
                   fontSize: 28,
                   color: '#22d3ee',
                   background: 'rgba(34, 211, 238, 0.12)',
@@ -101,7 +103,7 @@ export default async function CreatorOG({ params }: { params: Promise<Params> })
                   fontWeight: 600,
                 }}
               >
-                ✓ verified
+                verified
               </span>
             )}
           </div>
@@ -109,14 +111,12 @@ export default async function CreatorOG({ params }: { params: Promise<Params> })
           {bio && (
             <div
               style={{
+                display: 'flex',
                 fontSize: 22,
                 color: '#a3a3a3',
                 fontFamily: 'system-ui, -apple-system, sans-serif',
                 maxWidth: 1056,
                 lineHeight: 1.4,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
               }}
             >
@@ -134,18 +134,18 @@ export default async function CreatorOG({ params }: { params: Promise<Params> })
               fontFamily: 'system-ui, -apple-system, sans-serif',
             }}
           >
-            <div>
+            <div style={{ display: 'flex', gap: 6 }}>
               <span style={{ color: '#22d3ee', fontWeight: 700 }}>
                 {agentCount}
               </span>
-              <span style={{ color: '#737373' }}> agents</span>
+              <span style={{ color: '#737373' }}>agents</span>
             </div>
             {totalInstalls > 0 && (
-              <div>
+              <div style={{ display: 'flex', gap: 6 }}>
                 <span style={{ color: '#22d3ee', fontWeight: 700 }}>
                   {totalInstalls.toLocaleString()}
                 </span>
-                <span style={{ color: '#737373' }}> lifetime installs</span>
+                <span style={{ color: '#737373' }}>lifetime installs</span>
               </div>
             )}
           </div>

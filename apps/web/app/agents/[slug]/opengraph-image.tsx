@@ -94,6 +94,7 @@ export default async function AgentOG({ params }: { params: Promise<Params> }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
           <div
             style={{
+              display: 'flex',
               fontSize: 74,
               fontWeight: 800,
               fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -108,14 +109,12 @@ export default async function AgentOG({ params }: { params: Promise<Params> }) {
           {description && (
             <div
               style={{
+                display: 'flex',
                 fontSize: 22,
                 color: '#a3a3a3',
                 fontFamily: 'system-ui, -apple-system, sans-serif',
                 maxWidth: 1056,
                 lineHeight: 1.4,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
                 overflow: 'hidden',
               }}
             >
@@ -154,7 +153,7 @@ export default async function AgentOG({ params }: { params: Promise<Params> }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span>by {creator}</span>
                 {verified && (
-                  <span style={{ color: '#22d3ee', fontSize: 18 }}>✓ verified</span>
+                  <span style={{ color: '#22d3ee', fontSize: 18 }}>verified</span>
                 )}
               </div>
             )}
