@@ -1,26 +1,24 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getAgentBySlug } from '../../../lib/catalog';
+import { getAgentBySlug } from '@/lib/catalog';
 import { recordListingView } from '@datasetai/db';
-import { getDb } from '../../../lib/db';
-import { ReportButton } from '../../../components/ReportButton';
-import { SourceBadge } from '../../../components/SourceBadge';
-import { VerifiedBadge } from '../../../components/VerifiedBadge';
-import { JsonLd } from '../../../components/JsonLd';
-import {
-  softwareApplicationJsonLd,
-  breadcrumbJsonLd,
-} from '../../../lib/jsonld';
+import { getDb } from '@/lib/db';
+import { ReportButton } from '@/components/ReportButton';
+import { SourceBadge } from '@/components/SourceBadge';
+import { VerifiedBadge } from '@/components/VerifiedBadge';
+import { JsonLd } from '@/components/JsonLd';
+import { softwareApplicationJsonLd, breadcrumbJsonLd } from '@/lib/jsonld';
 
 export const revalidate = 60;
 
 interface Params {
-  slug: string[];
+  scope: string;
+  name: string;
 }
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
-  const { slug } = await params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name } = await params;
+  const agentId = `${scope}/${name}`;
   const result = await getAgentBySlug(agentId);
   if (!result) return { title: 'Agent not found' };
   return {
@@ -43,8 +41,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
 }
 
 export default async function ListingPage({ params }: { params: Promise<Params> }) {
-  const { slug } = await params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name } = await params;
+  const agentId = `${scope}/${name}`;
   const result = await getAgentBySlug(agentId);
   if (!result) notFound();
 

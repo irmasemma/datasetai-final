@@ -1,11 +1,11 @@
-// /agents/[slug]/claim — story E5.8 claim flow.
+// /agents/[scope]/[name]/claim — story E5.8 claim flow.
 // Submits a row to claim_requests; admin approves manually via /admin/claims.
 
 import { agents } from '@datasetai/db';
 import { eq } from 'drizzle-orm';
 import { notFound, redirect } from 'next/navigation';
-import { getDb } from '../../../../lib/db';
-import { getSession } from '../../../../lib/auth';
+import { getDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 import { ClaimForm } from './ClaimForm';
 
 export const metadata = { title: 'Claim listing' };
@@ -13,10 +13,10 @@ export const metadata = { title: 'Claim listing' };
 export default async function ClaimPage({
   params,
 }: {
-  params: Promise<{ slug: string[] }>;
+  params: Promise<{ scope: string; name: string }>;
 }) {
-  const { slug } = await params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name } = await params;
+  const agentId = `${scope}/${name}`;
   const session = await getSession();
   if (!session) redirect(`/api/auth/github?next=/agents/${agentId}/claim`);
   const db = getDb();

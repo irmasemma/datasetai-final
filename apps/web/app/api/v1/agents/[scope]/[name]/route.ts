@@ -1,11 +1,11 @@
-// PATCH /api/v1/agents/[slug] — story E4.6 (edit metadata without version bump).
+// PATCH /api/v1/agents/[scope]/[name] — story E4.6 (edit metadata without version bump).
 // Updates `agents` row only; versions stay frozen.
 
 import { agents } from '@datasetai/db';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { getDb } from '../../../../../lib/db';
-import { getSession } from '../../../../../lib/auth';
+import { getDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 
 interface PatchBody {
   readonly name?: string;
@@ -17,10 +17,10 @@ interface PatchBody {
 
 export async function PATCH(
   req: Request,
-  ctx: { params: Promise<{ slug: string[] }> },
+  ctx: { params: Promise<{ scope: string; name: string }> },
 ): Promise<Response> {
-  const { slug } = await ctx.params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name } = await ctx.params;
+  const agentId = `${scope}/${name}`;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();

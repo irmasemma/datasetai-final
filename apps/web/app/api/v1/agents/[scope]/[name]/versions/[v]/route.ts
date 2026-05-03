@@ -1,18 +1,18 @@
-// DELETE /api/v1/agents/[slug]/versions/[v] — story E4.7 (unpublish version).
+// DELETE /api/v1/agents/[scope]/[name]/versions/[v] — story E4.7 (unpublish version).
 // Tombstones via unpublished_at; never hard-delete.
 
 import { agentVersions } from '@datasetai/db';
 import { and, eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { getDb } from '../../../../../../../lib/db';
-import { getSession } from '../../../../../../../lib/auth';
+import { getDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 
 export async function DELETE(
   _req: Request,
-  ctx: { params: Promise<{ slug: string[]; v: string }> },
+  ctx: { params: Promise<{ scope: string; name: string; v: string }> },
 ): Promise<Response> {
-  const { slug, v } = await ctx.params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name, v } = await ctx.params;
+  const agentId = `${scope}/${name}`;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();

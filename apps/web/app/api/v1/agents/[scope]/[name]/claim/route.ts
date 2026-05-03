@@ -1,11 +1,11 @@
-// POST /api/v1/agents/[slug]/claim — story E5.8 (claim listing).
+// POST /api/v1/agents/[scope]/[name]/claim — story E5.8 (claim listing).
 // Inserts a claim_requests row; admin reviews manually.
 
 import { agents, claimRequests } from '@datasetai/db';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
-import { getDb } from '../../../../../../lib/db';
-import { getSession } from '../../../../../../lib/auth';
+import { getDb } from '@/lib/db';
+import { getSession } from '@/lib/auth';
 
 interface Body {
   readonly proof?: string;
@@ -13,10 +13,10 @@ interface Body {
 
 export async function POST(
   req: Request,
-  ctx: { params: Promise<{ slug: string[] }> },
+  ctx: { params: Promise<{ scope: string; name: string }> },
 ): Promise<Response> {
-  const { slug } = await ctx.params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name } = await ctx.params;
+  const agentId = `${scope}/${name}`;
   const session = await getSession();
   if (!session) return NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401 });
   const db = getDb();

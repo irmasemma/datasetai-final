@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og';
-import { getAgentBySlug } from '../../../lib/catalog';
+import { getAgentBySlug } from '@/lib/catalog';
 
 export const runtime = 'nodejs';
 export const alt = 'Agent on datasetai.xyz';
@@ -7,12 +7,13 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 interface Params {
-  slug: string[];
+  scope: string;
+  name: string;
 }
 
 export default async function AgentOG({ params }: { params: Promise<Params> }) {
-  const { slug } = await params;
-  const agentId = Array.isArray(slug) ? slug.join('/') : slug;
+  const { scope, name: nameParam } = await params;
+  const agentId = `${scope}/${nameParam}`;
   const result = await getAgentBySlug(agentId);
 
   const name = result?.card.name ?? 'Agent not found';
