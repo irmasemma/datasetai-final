@@ -3,14 +3,11 @@
 @source '../../../packages/ui/src/**/*.{ts,tsx}';
 
 /* ----------------------------------------------------------------------------
- * Theme tokens
+ * Theme tokens — brutalist-editorial dev tool.
  *
- * - Tailwind v4 ships OKLCH default colors, so neutral / zinc / cyan ramps are
- *   already perceptually uniform; we just override the brand-relevant pieces
- *   and wire next/font variables into --font-sans / --font-mono.
- * - Semantic tokens (--background, --foreground, --primary, --border, --ring)
- *   give us a shadcn-compatible surface for future component installs and a
- *   single place to retune the palette.
+ * Palette: warm-off-white + true-near-black + electric amber accent. Distinct
+ * from Linear violet, Modal green, Vercel BW, Stripe purple. Amber reads as
+ * "currency" — fits the creator-economy positioning underneath the registry.
  * -------------------------------------------------------------------------- */
 
 @theme {
@@ -21,59 +18,55 @@
     var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     'Liberation Mono', 'Courier New', monospace;
 
-  /* Brand accent — terminal-cyan. Distinct from Linear violet / Modal green. */
-  --color-brand-50: oklch(0.97 0.03 200);
-  --color-brand-100: oklch(0.93 0.06 200);
-  --color-brand-300: oklch(0.82 0.13 200);
-  --color-brand-400: oklch(0.74 0.16 200);
-  --color-brand-500: oklch(0.6 0.16 200);
-  --color-brand-600: oklch(0.52 0.16 200);
-  --color-brand-700: oklch(0.42 0.14 200);
-  --color-brand-900: oklch(0.28 0.09 200);
+  /* Brand accent — electric amber. Hue 75 = warm-orange-yellow, distinctive
+     in dev-tool space without being soft. Chroma kept high for energy. */
+  --color-brand-50: oklch(0.97 0.03 80);
+  --color-brand-100: oklch(0.94 0.06 78);
+  --color-brand-300: oklch(0.86 0.13 75);
+  --color-brand-400: oklch(0.82 0.16 75);
+  --color-brand-500: oklch(0.78 0.17 72);
+  --color-brand-600: oklch(0.66 0.16 65);
+  --color-brand-700: oklch(0.52 0.14 58);
+  --color-brand-900: oklch(0.32 0.09 55);
 
-  /* Semantic brand-text token — auto-swaps for WCAG AA in both modes.
-     Light: brand-700 (~5.6:1 on white). Dark: brand-400 (~7.7:1 on dark). */
+  /* Semantic brand-text token — auto-swaps for WCAG AA in both modes. */
   --color-brand: var(--color-brand-700);
 
-  /* Semantic tokens — light defaults; overridden in dark below. */
-  --color-background: oklch(1 0 0);
-  --color-foreground: oklch(0.18 0 0);
+  /* Surfaces — warm-off-white in light, true-near-black in dark. */
+  --color-background: oklch(0.985 0.005 80);
+  --color-foreground: oklch(0.12 0 0);
   --color-card: oklch(1 0 0);
-  --color-card-foreground: oklch(0.18 0 0);
-  --color-muted: oklch(0.97 0 0);
-  --color-muted-foreground: oklch(0.45 0 0);
-  --color-border: oklch(0.92 0 0);
-  --color-input: oklch(0.92 0 0);
+  --color-card-foreground: oklch(0.12 0 0);
+  --color-muted: oklch(0.95 0.005 80);
+  --color-muted-foreground: oklch(0.42 0.005 80);
+  --color-border: oklch(0.88 0.005 80);
+  --color-input: oklch(0.88 0.005 80);
   --color-ring: var(--color-brand-500);
-  --color-primary: oklch(0.18 0 0);
-  --color-primary-foreground: oklch(0.98 0 0);
+  --color-primary: oklch(0.12 0 0);
+  --color-primary-foreground: oklch(0.98 0.005 80);
   --color-accent: var(--color-brand-500);
-  --color-accent-foreground: oklch(0.98 0 0);
-  --color-destructive: oklch(0.6 0.22 25);
+  --color-accent-foreground: oklch(0.12 0 0);
+  --color-destructive: oklch(0.55 0.22 25);
   --color-destructive-foreground: oklch(0.98 0 0);
 }
 
-/* Class-based dark mode lets us support a future manual toggle without ripping
-   out `dark:` utilities; until a toggle exists, prefers-color-scheme below
-   adds the class via media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @media (prefers-color-scheme: dark) {
   html:not(.light) {
     color-scheme: dark;
-  }
-  html:not(.light) {
-    --color-background: oklch(0.14 0 0);
-    --color-foreground: oklch(0.98 0 0);
-    --color-card: oklch(0.18 0 0);
-    --color-card-foreground: oklch(0.98 0 0);
-    --color-muted: oklch(0.22 0 0);
-    --color-muted-foreground: oklch(0.72 0 0);
-    --color-border: oklch(0.26 0 0);
-    --color-input: oklch(0.26 0 0);
-    --color-primary: oklch(0.98 0 0);
-    --color-primary-foreground: oklch(0.18 0 0);
+    --color-background: oklch(0.08 0 0);
+    --color-foreground: oklch(0.98 0.005 80);
+    --color-card: oklch(0.12 0 0);
+    --color-card-foreground: oklch(0.98 0.005 80);
+    --color-muted: oklch(0.16 0 0);
+    --color-muted-foreground: oklch(0.7 0.005 80);
+    --color-border: oklch(0.22 0 0);
+    --color-input: oklch(0.22 0 0);
+    --color-primary: oklch(0.98 0.005 80);
+    --color-primary-foreground: oklch(0.08 0 0);
     --color-brand: var(--color-brand-400);
+    --color-accent-foreground: oklch(0.08 0 0);
   }
   html:not(.light) body {
     color-scheme: dark;
@@ -85,19 +78,46 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-feature-settings:
-    'cv02', 'cv03', 'cv04', 'cv11';
+    'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss03';
+  font-variant-numeric: tabular-nums;
 }
 
-/* Smoother focus ring across interactive elements. */
+/* Sharper headline rendering — denser tracking on display sizes. */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.022em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss03', 'cpsp';
+}
+
+/* Focus ring — amber, sharp, no rounded inflation. */
 :where(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-ring);
+  outline: 2px solid var(--color-brand-500);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
-/* Selection uses the brand accent (subtle, not loud). */
+/* Brand-tinted selection. */
 ::selection {
-  background: color-mix(in oklch, var(--color-brand-500) 30%, transparent);
+  background: color-mix(in oklch, var(--color-brand-500) 35%, transparent);
+  color: var(--color-foreground);
+}
+
+/* Cursor blink for terminal hero. Reduced-motion safe via the block below. */
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1.05s steps(1, end) infinite;
+}
+
+/* Subtle hover lift used on cards. */
+.hover-lift {
+  transition: transform 200ms cubic-bezier(0.2, 0, 0, 1), border-color 200ms;
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
 }
 
 /* Reduce motion for users who request it. */
@@ -109,5 +129,12 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .cursor-blink {
+    animation: none !important;
+    opacity: 1;
+  }
+  .hover-lift:hover {
+    transform: none;
   }
 }

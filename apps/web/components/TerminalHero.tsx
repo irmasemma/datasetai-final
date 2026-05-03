@@ -40,22 +40,20 @@ export function TerminalHero() {
   }, [command]);
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-sm">
-      {/* Window chrome */}
+    <div className="border border-border bg-card">
+      {/* Header — branch indicator + copy */}
       <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
-        <div className="flex items-center gap-1.5">
-          <span className="size-3 rounded-full bg-[#ff5f57]/80" aria-hidden />
-          <span className="size-3 rounded-full bg-[#febc2e]/80" aria-hidden />
-          <span className="size-3 rounded-full bg-[#28c840]/80" aria-hidden />
-          <span className="ml-3 font-mono text-xs text-muted-foreground">
-            ~/your-project
-          </span>
+        <div className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
+          <span className="inline-flex size-1.5 rounded-full bg-brand-500" aria-hidden />
+          ~/your-project
+          <span className="text-border" aria-hidden>·</span>
+          <span className="text-foreground">main</span>
         </div>
         <button
           type="button"
           onClick={onCopy}
           aria-label={copied ? 'Copied to clipboard' : `Copy command: ${command}`}
-          className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2.5 py-1 font-mono text-xs text-muted-foreground transition-colors hover:border-brand-500/60 hover:text-foreground active:scale-[0.98]"
+          className="inline-flex items-center gap-1.5 border border-border bg-background px-2.5 py-1 font-mono text-[11px] text-muted-foreground transition-colors hover:border-brand-500 hover:text-foreground"
         >
           {copied ? (
             <>
@@ -97,12 +95,12 @@ export function TerminalHero() {
         </span>
       </div>
 
-      {/* Tool target tabs */}
+      {/* Tool target tabs — typographic underline, not pill */}
       <div
         role="tablist"
         aria-label="Target AI tool"
         id={tabsId}
-        className="flex gap-1 overflow-x-auto border-b border-border px-3 py-2"
+        className="flex gap-0 overflow-x-auto border-b border-border"
       >
         {TOOLS.map((t) => {
           const selected = active === t.id;
@@ -116,13 +114,19 @@ export function TerminalHero() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(t.id)}
               className={
-                'whitespace-nowrap rounded-md px-2.5 py-1 font-mono text-xs transition-colors ' +
+                'relative whitespace-nowrap border-r border-border px-3 py-2 font-mono text-[11px] transition-colors ' +
                 (selected
-                  ? 'bg-brand-500/15 text-brand'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground')
+                  ? 'bg-background text-foreground'
+                  : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground')
               }
             >
               {t.label}
+              {selected && (
+                <span
+                  aria-hidden
+                  className="absolute inset-x-0 -bottom-px h-0.5 bg-brand-500"
+                />
+              )}
             </button>
           );
         })}
@@ -133,38 +137,41 @@ export function TerminalHero() {
         role="tabpanel"
         id={`${tabsId}-panel`}
         aria-labelledby={tabsId}
-        className="space-y-1.5 px-5 py-5 font-mono text-[13px] leading-relaxed sm:text-sm"
+        className="space-y-2 px-5 py-6 font-mono text-[13px] leading-[1.65] sm:text-sm"
       >
         <div className="overflow-x-auto">
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-2.5">
             <span className="select-none text-brand" aria-hidden>
-              $
+              ❯
             </span>
             <span className="whitespace-nowrap text-foreground">{command}</span>
           </div>
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand" aria-hidden>
+          <span className="select-none text-brand" aria-hidden>
             ✓
           </span>{' '}
-          Detected target: <span className="text-foreground">{tool.id}</span> ({tool.detect})
+          target → <span className="text-foreground">{tool.id}</span>{' '}
+          <span className="text-muted-foreground/70">({tool.detect})</span>
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand" aria-hidden>
+          <span className="select-none text-brand" aria-hidden>
             ✓
           </span>{' '}
-          Resolved <span className="text-foreground">{SAMPLE_AGENT}</span>@1.4.0 — signed
-          manifest verified
+          resolved <span className="text-foreground">{SAMPLE_AGENT}@1.4.0</span>{' '}
+          <span className="text-brand">·</span>{' '}
+          <span className="text-foreground">signed</span>
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand" aria-hidden>
+          <span className="select-none text-brand" aria-hidden>
             ✓
           </span>{' '}
-          Wrote 1 file to{' '}
+          wrote{' '}
           <span className="text-foreground">{tool.detect}code-reviewer/</span>
         </div>
-        <div className="pt-2 text-muted-foreground">
-          Installed <span className="text-foreground">code-reviewer@1.4.0</span> in 2.3s
+        <div className="flex items-baseline gap-2.5 pt-1.5">
+          <span className="text-foreground">installed in 2.3s</span>
+          <span aria-hidden className="cursor-blink select-none text-brand">▋</span>
         </div>
       </div>
     </div>

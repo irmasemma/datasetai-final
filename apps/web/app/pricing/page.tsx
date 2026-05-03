@@ -10,71 +10,110 @@ export const metadata: Metadata = {
   alternates: { canonical: '/pricing' },
 };
 
-interface Plan {
+interface Tier {
   name: string;
-  badge?: string;
   price: string;
-  cadence: string;
+  priceMeta: string;
   description: string;
   cta: { label: string; href: string };
-  highlight?: boolean;
-  features: ReadonlyArray<string>;
+  primary?: boolean;
 }
 
-const PLANS: ReadonlyArray<Plan> = [
+const TIERS: ReadonlyArray<Tier> = [
   {
     name: 'Discover',
-    price: '$0',
-    cadence: 'forever',
-    description:
-      'Browse, install, and run any public agent. No account needed for read-only access.',
-    cta: { label: 'Browse agents', href: '/agents' },
-    features: [
-      'One-command install via the CLI',
-      'Search across every supported format',
-      'Cross-tool: Claude Code, Cursor, Codex, Aider, Gemini',
-      'Signed-manifest verification on every install',
-      'No telemetry by default — opt-in only',
-    ],
+    price: 'Free',
+    priceMeta: 'forever',
+    description: 'Browse and install. No account needed.',
+    cta: { label: 'Browse the registry', href: '/agents' },
   },
   {
     name: 'Publish',
-    badge: 'Most popular',
-    price: '$0',
-    cadence: 'in MVP',
-    description:
-      'Free for every creator while we earn the audience. Founding-creator program opens with Phase 2.',
-    highlight: true,
-    cta: { label: 'Publish your agent', href: '/publish' },
-    features: [
-      'Publish unlimited public agents',
-      'Linter + manifest signing on every release',
-      'Install metrics broken down by tool',
-      'Verified-publisher review on request',
-      'Founding-creator 90% revenue share when paid agents launch',
-    ],
+    price: 'Free',
+    priceMeta: 'in MVP',
+    description: 'Ship public agents. Founding-creator program opens with Phase 2.',
+    cta: { label: 'Publish an agent', href: '/publish' },
+    primary: true,
   },
   {
     name: 'Enterprise',
-    badge: 'Phase 3',
     price: 'Talk to us',
-    cadence: '',
-    description:
-      'Private and team registries with governance, SSO, audit log, and an on-prem option.',
-    cta: { label: 'Get in touch', href: 'mailto:hello@datasetai.xyz' },
-    features: [
-      'Private/team registries with RBAC',
-      'SSO (SAML, OIDC) and audit logs',
-      'On-prem / air-gapped deployment option',
-      'Automated security scanning of agent content',
-      'Concierge onboarding for security review',
+    priceMeta: 'phase 3',
+    description: 'Private registry, SSO, audit log, on-prem option.',
+    cta: { label: 'hello@datasetai.xyz', href: 'mailto:hello@datasetai.xyz' },
+  },
+];
+
+interface ComparisonRow {
+  feature: string;
+  values: [string | boolean, string | boolean, string | boolean];
+}
+
+const COMPARISON: ReadonlyArray<{ section: string; rows: ReadonlyArray<ComparisonRow> }> = [
+  {
+    section: 'Discover & install',
+    rows: [
+      { feature: 'Browse the public registry', values: [true, true, true] },
+      { feature: 'One-command CLI install', values: [true, true, true] },
+      { feature: 'Cross-tool: Claude Code, Cursor, Codex, Aider, Gemini', values: [true, true, true] },
+      { feature: 'Signed-manifest verification', values: [true, true, true] },
+      { feature: 'Anonymous browsing (no account required)', values: [true, true, '—'] },
+    ],
+  },
+  {
+    section: 'Publish & monetize',
+    rows: [
+      { feature: 'Publish unlimited public agents', values: ['—', true, true] },
+      { feature: 'Linter + manifest signing on every release', values: ['—', true, true] },
+      { feature: 'Install metrics broken down by tool', values: ['—', true, true] },
+      { feature: 'Verified-publisher review', values: ['—', true, true] },
+      { feature: 'Founding-creator 90% rev share', values: ['—', '6 mo', '—'] },
+    ],
+  },
+  {
+    section: 'Trust & governance',
+    rows: [
+      { feature: 'Report-listing flow', values: [true, true, true] },
+      { feature: 'Private / team registries', values: ['—', '—', true] },
+      { feature: 'SSO (SAML, OIDC)', values: ['—', '—', true] },
+      { feature: 'Audit log + RBAC', values: ['—', '—', true] },
+      { feature: 'On-prem / air-gapped deploy', values: ['—', '—', true] },
+      { feature: 'Automated security scanning', values: ['—', '—', true] },
     ],
   },
 ];
 
+function Cell({ value }: { value: string | boolean }) {
+  if (value === true) {
+    return (
+      <span aria-label="Included" className="inline-flex">
+        <svg
+          viewBox="0 0 16 16"
+          className="size-4 text-brand"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="square"
+          aria-hidden
+        >
+          <path d="M3 8l3.5 3.5L13 5" />
+        </svg>
+      </span>
+    );
+  }
+  if (value === false || value === '—') {
+    return <span aria-hidden className="text-muted-foreground/50">—</span>;
+  }
+  return (
+    <span className="font-mono text-[11px] uppercase tracking-wider text-foreground">
+      {value}
+    </span>
+  );
+}
+
 export default function PricingPage() {
   return (
-    <div className="space-y-16">
+    <div className="space-y-20 pb-8">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: 'Home', url: '/' },
@@ -82,104 +121,140 @@ export default function PricingPage() {
         ])}
       />
 
-      <header className="space-y-4 pt-4 text-center">
-        <p className="font-mono text-xs uppercase tracking-wider text-brand">
-          Pricing
+      {/* Hero */}
+      <header className="space-y-6 pt-6 sm:pt-12">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+          pricing
         </p>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Free until we earn the audience.
+        <h1 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.04em] text-foreground sm:text-6xl">
+          Free until we
+          <br />
+          earn the audience.
         </h1>
-        <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-          Discovery and installs are free forever. Publishing is free during MVP. The
-          creator-economy paid tier launches with Phase 2 — founding creators get a 90% revenue
-          share for six months.
+        <p className="max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          Discovery is free forever. Publishing is free in MVP. The creator-economy paid tier
+          ships with Phase 2 — founding creators keep <span className="text-foreground font-semibold">90%</span> for six months. Flat platform fee, never per-install.
         </p>
       </header>
 
-      <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {PLANS.map((plan) => (
+      {/* Tier cards — sharp, no rounded inflation */}
+      <section
+        aria-label="Pricing tiers"
+        className="grid grid-cols-1 gap-px border border-border bg-border lg:grid-cols-3"
+      >
+        {TIERS.map((tier) => (
           <div
-            key={plan.name}
+            key={tier.name}
             className={
-              'relative flex flex-col rounded-xl border bg-card p-6 ' +
-              (plan.highlight
-                ? 'border-brand-500/60 shadow-[0_0_0_1px_oklch(0.6_0.16_200/0.4)]'
-                : 'border-border')
+              'relative flex flex-col gap-5 p-6 sm:p-8 ' +
+              (tier.primary ? 'bg-foreground text-background' : 'bg-card')
             }
           >
-            {plan.badge && (
+            <div className="flex items-baseline justify-between">
+              <h2 className="text-lg font-semibold tracking-tight">{tier.name}</h2>
               <span
                 className={
-                  'absolute -top-3 left-6 rounded-full px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider ' +
-                  (plan.highlight
-                    ? 'bg-brand-700 text-background'
-                    : 'bg-muted text-muted-foreground')
+                  'font-mono text-[10px] uppercase tracking-wider ' +
+                  (tier.primary ? 'text-background/60' : 'text-muted-foreground')
                 }
               >
-                {plan.badge}
+                {tier.priceMeta}
               </span>
-            )}
-
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">{plan.name}</h2>
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-mono text-3xl font-bold tracking-tight">
-                  {plan.price}
-                </span>
-                {plan.cadence && (
-                  <span className="text-sm text-muted-foreground">{plan.cadence}</span>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground">{plan.description}</p>
             </div>
 
-            <ul className="mt-6 flex-1 space-y-2.5 text-sm">
-              {plan.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-2">
-                  <svg
-                    viewBox="0 0 16 16"
-                    className="mt-1 size-3.5 shrink-0 text-brand"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    aria-hidden
-                  >
-                    <path d="M3 8l3.5 3.5L13 5" />
-                  </svg>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
+            <p className="font-mono text-4xl font-bold tracking-tight">{tier.price}</p>
 
-            <Link
-              href={plan.cta.href}
+            <p
               className={
-                'mt-6 inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-opacity ' +
-                (plan.highlight
-                  ? 'bg-foreground text-background hover:opacity-90'
-                  : 'border border-border bg-card text-foreground hover:border-brand-500/40')
+                'flex-1 text-sm leading-relaxed ' +
+                (tier.primary ? 'text-background/80' : 'text-muted-foreground')
               }
             >
-              {plan.cta.label}
+              {tier.description}
+            </p>
+
+            <Link
+              href={tier.cta.href}
+              className={
+                'mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold transition-transform hover:-translate-y-px ' +
+                (tier.primary
+                  ? 'bg-background text-foreground'
+                  : 'border border-foreground text-foreground hover:bg-foreground hover:text-background')
+              }
+            >
+              {tier.cta.label} →
             </Link>
           </div>
         ))}
       </section>
 
-      <section className="rounded-xl border border-border bg-muted/40 p-6 sm:p-10">
-        <h2 className="text-xl font-semibold tracking-tight">Why free now?</h2>
-        <p className="mt-3 max-w-3xl text-muted-foreground">
-          A registry is only useful if developers can actually find what they need. We are
-          spending the MVP earning that — by indexing the catalog wide, by paying our own way
-          on hosting, and by treating every creator like a founding contributor. Paid
-          publishing only kicks in when there is a real audience to monetize against, and the
-          first cohort keeps a 90% revenue share for the first six months.
+      {/* Comparison */}
+      <section aria-label="Tier comparison" className="space-y-6">
+        <header className="border-b border-border pb-4">
+          <h2 className="text-2xl font-bold tracking-tight">What&apos;s included</h2>
+          <p className="mt-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+            full breakdown
+          </p>
+        </header>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[640px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                <th scope="col" className="py-3 pr-4 text-left text-xs font-mono uppercase tracking-wider text-muted-foreground">
+                  &nbsp;
+                </th>
+                {TIERS.map((t) => (
+                  <th
+                    key={t.name}
+                    scope="col"
+                    className="px-4 py-3 text-left text-xs font-mono uppercase tracking-wider text-foreground"
+                  >
+                    {t.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARISON.map((group) => (
+                <>
+                  <tr key={`h-${group.section}`}>
+                    <th
+                      scope="rowgroup"
+                      colSpan={4}
+                      className="bg-muted/40 px-0 pb-2 pt-6 text-left font-mono text-[11px] uppercase tracking-wider text-brand"
+                    >
+                      {group.section}
+                    </th>
+                  </tr>
+                  {group.rows.map((row) => (
+                    <tr
+                      key={row.feature}
+                      className="border-b border-border last:border-b-0"
+                    >
+                      <td className="py-3 pr-4 text-foreground">{row.feature}</td>
+                      {row.values.map((v, i) => (
+                        <td key={i} className="px-4 py-3">
+                          <Cell value={v} />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* Footnote */}
+      <section className="border-t border-border pt-8">
+        <p className="max-w-2xl font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
+          how we make money
         </p>
-        <p className="mt-3 max-w-3xl text-muted-foreground">
-          Pricing for paid agents is set by the creator. We take a flat platform fee — never a
-          percentage of every install — to keep the long tail viable.
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          A flat platform fee on paid agents — set per-tier, never per-install — so the long
+          tail stays viable. Creators set their own price. We never take a cut of free agents.
         </p>
       </section>
     </div>

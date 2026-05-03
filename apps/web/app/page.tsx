@@ -39,39 +39,37 @@ export default async function HomePage(props: {
 
   return (
     <div className="space-y-16">
-      <section className="grid grid-cols-1 items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pt-8">
-        <div className="space-y-6">
-          <Link
-            href="/about"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-brand-500/40 hover:text-foreground"
-          >
-            <span className="size-1.5 rounded-full bg-brand-500" aria-hidden />
-            Format-agnostic. Cross-tool. Coming with the creator economy.
-          </Link>
-
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-            npm for AI agents.
-          </h1>
-
-          <p className="max-w-xl text-lg text-muted-foreground sm:text-xl">
-            One registry for Claude Skills, MCP servers, AGENTS.md, .cursorrules, and every format
-            that comes next. One CLI to install them in whichever tool you use.
+      <section className="grid grid-cols-1 items-end gap-12 pt-6 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:pt-12">
+        <div className="space-y-8">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+            v0 · the agent registry
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 pt-2">
+          <h1 className="text-5xl font-extrabold leading-[0.92] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-[5.5rem]">
+            npm for
+            <br />
+            AI agents.
+          </h1>
+
+          <p className="max-w-md text-lg leading-relaxed text-muted-foreground sm:text-xl">
+            Claude Skills, MCP servers, AGENTS.md, <span className="font-mono text-[0.92em]">.cursorrules</span>
+            {' '}— one registry, one CLI, every tool.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-1">
             <Link
               href="/agents"
-              className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-background transition-opacity hover:opacity-90"
+              className="group inline-flex items-center gap-2 rounded-none bg-foreground px-5 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-px"
             >
-              Browse agents
+              Browse the registry
               <svg
                 viewBox="0 0 16 16"
-                className="size-3.5"
+                className="size-3.5 transition-transform group-hover:translate-x-0.5"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                strokeLinecap="square"
+                strokeLinejoin="miter"
                 aria-hidden
               >
                 <path d="M3 8h10M9 4l4 4-4 4" />
@@ -79,14 +77,14 @@ export default async function HomePage(props: {
             </Link>
             <Link
               href="/publish"
-              className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-brand-500/40"
+              className="text-sm font-semibold text-foreground underline decoration-brand decoration-2 underline-offset-[6px] transition-colors hover:text-brand"
             >
-              Publish your agent
+              Publish an agent →
             </Link>
           </div>
         </div>
 
-        <div className="lg:pl-4">
+        <div className="lg:translate-y-2">
           <TerminalHero />
         </div>
       </section>
