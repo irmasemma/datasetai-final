@@ -4,6 +4,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 import { SiteHeader } from '../components/SiteHeader';
+import { SiteFooter } from '../components/SiteFooter';
 import { JsonLd } from '../components/JsonLd';
 import { organizationJsonLd, websiteJsonLd } from '../lib/jsonld';
 import { SITE, SITE_URL } from '../lib/site';
@@ -81,11 +82,20 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+      <body className="flex min-h-screen flex-col bg-background font-sans text-foreground antialiased">
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <NextIntlClientProvider messages={messages}>
+          <a
+            href="#main"
+            className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-foreground focus:px-3 focus:py-2 focus:text-sm focus:text-background"
+          >
+            Skip to main content
+          </a>
           <SiteHeader />
-          <div className="mx-auto max-w-6xl px-6 py-8">{children}</div>
+          <div id="main" className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
+            {children}
+          </div>
+          <SiteFooter />
         </NextIntlClientProvider>
       </body>
     </html>
