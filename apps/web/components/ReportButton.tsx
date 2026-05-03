@@ -45,7 +45,7 @@ export function ReportButton({ agentId }: { agentId: string }) {
       <button
         onClick={() => setOpen(true)}
         type="button"
-        className="text-xs text-neutral-500 underline hover:text-neutral-900 dark:hover:text-neutral-200"
+        className="text-xs text-muted-foreground underline hover:text-foreground"
       >
         Report
       </button>
@@ -55,12 +55,12 @@ export function ReportButton({ agentId }: { agentId: string }) {
   return (
     <form
       onSubmit={submit}
-      className="space-y-2 rounded border border-neutral-300 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-900"
+      className="space-y-2 rounded border border-border bg-card p-3"
     >
       <select
         value={reason}
         onChange={(e) => setReason(e.target.value)}
-        className="w-full rounded border border-neutral-300 bg-white p-1 text-sm dark:border-neutral-700 dark:bg-neutral-950"
+        className="w-full rounded border border-border bg-card p-1 text-sm text-foreground"
       >
         {REASONS.map((r) => (
           <option key={r.value} value={r.value}>
@@ -73,21 +73,21 @@ export function ReportButton({ agentId }: { agentId: string }) {
         onChange={(e) => setDetails(e.target.value)}
         placeholder="Optional context"
         rows={3}
-        className="w-full rounded border border-neutral-300 bg-white p-1 text-sm dark:border-neutral-700 dark:bg-neutral-950"
+        className="w-full rounded border border-border bg-card p-1 text-sm text-foreground placeholder:text-muted-foreground"
       />
       {err && <p className="text-xs text-red-600">{err}</p>}
       <div className="flex justify-end gap-2 text-xs">
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="rounded px-2 py-1 text-neutral-500"
+          className="rounded px-2 py-1 text-muted-foreground"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={submitting}
-          className="rounded bg-neutral-900 px-2 py-1 text-white disabled:opacity-50 dark:bg-neutral-100 dark:text-neutral-900"
+          className="rounded bg-foreground px-2 py-1 text-background disabled:opacity-50"
         >
           {submitting ? 'Reporting…' : 'Submit'}
         </button>

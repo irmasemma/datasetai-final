@@ -67,7 +67,7 @@ export function Filters(props: {
             href={buildUrl(basePath, current, { category: c.category })}
             active={current['category'] === c.category}
           >
-            {c.category} <span className="text-neutral-400">({c.count})</span>
+            {c.category} <span className="text-muted-foreground/70">({c.count})</span>
           </FilterLink>
         ))}
       </FilterGroup>
@@ -85,7 +85,7 @@ export function Filters(props: {
       {Object.values(current).some((v) => v) && (
         <Link
           href={basePath}
-          className="text-xs text-neutral-500 underline hover:text-neutral-900 dark:hover:text-neutral-50"
+          className="text-xs text-muted-foreground underline hover:text-foreground"
         >
           Clear filters
         </Link>
@@ -97,7 +97,7 @@ export function Filters(props: {
 function FilterGroup({ label, children }: { label: string; children: ReactNode }) {
   return (
     <fieldset className="space-y-2">
-      <legend className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+      <legend className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </legend>
       <div className="flex flex-col gap-1.5">{children}</div>
@@ -120,8 +120,8 @@ function FilterLink({
       aria-current={active ? 'true' : undefined}
       className={
         active
-          ? 'rounded bg-neutral-900 px-2 py-1 text-white dark:bg-neutral-50 dark:text-neutral-900'
-          : 'rounded px-2 py-1 text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-900'
+          ? 'rounded bg-foreground px-2 py-1 text-background'
+          : 'rounded px-2 py-1 text-muted-foreground hover:bg-muted hover:text-foreground'
       }
     >
       {children}

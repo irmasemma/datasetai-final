@@ -4,7 +4,7 @@ import { AgentCard } from './AgentCard';
 export function CatalogGrid({ agents }: { agents: readonly AgentCardData[] }) {
   if (agents.length === 0) {
     return (
-      <p className="rounded border border-dashed border-neutral-300 px-4 py-12 text-center text-sm text-neutral-500 dark:border-neutral-700">
+      <p className="rounded border border-dashed border-border px-4 py-12 text-center text-sm text-muted-foreground">
         No agents match these filters yet.
       </p>
     );

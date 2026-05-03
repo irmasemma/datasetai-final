@@ -3,8 +3,8 @@
 export function VerifiedBadge({ size = 'sm' }: { size?: 'sm' | 'md' }) {
   const cls =
     size === 'md'
-      ? 'inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-900 dark:bg-blue-900/40 dark:text-blue-200'
-      : 'inline-flex items-center gap-0.5 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-900 dark:bg-blue-900/40 dark:text-blue-200';
+      ? 'inline-flex items-center gap-1 rounded bg-brand-500/15 px-2 py-0.5 text-xs font-medium text-brand-500'
+      : 'inline-flex items-center gap-0.5 rounded bg-brand-500/15 px-1.5 py-0.5 text-[10px] font-medium text-brand-500';
   return (
     <span title="Verified publisher" className={cls}>
       <svg viewBox="0 0 16 16" width="10" height="10" aria-hidden="true">
