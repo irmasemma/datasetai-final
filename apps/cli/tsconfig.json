@@ -1,0 +1,10 @@
+{
+  "extends": "@datasetai/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": true
+  },
+  "include": ["bin/**/*", "src/**/*"]
+}

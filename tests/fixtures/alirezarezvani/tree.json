@@ -1,0 +1,53 @@
+{
+  "sha": "abcdef",
+  "url": "https://api.github.com/repos/alirezarezvani/claude-skills/git/trees/main",
+  "tree": [
+    {
+      "path": "skills",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "tree-skills"
+    },
+    {
+      "path": "skills/code-explainer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "tree-code-explainer"
+    },
+    {
+      "path": "skills/code-explainer/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "size": 280,
+      "sha": "blob-code-explainer-skill"
+    },
+    {
+      "path": "skills/code-explainer/LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "size": 1066,
+      "sha": "blob-code-explainer-license"
+    },
+    {
+      "path": "skills/test-runner",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "tree-test-runner"
+    },
+    {
+      "path": "skills/test-runner/SKILL.md",
+      "mode": "100644",
+      "type": "blob",
+      "size": 410,
+      "sha": "blob-test-runner-skill"
+    },
+    {
+      "path": "skills/test-runner/LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "size": 11357,
+      "sha": "blob-test-runner-license"
+    }
+  ],
+  "truncated": false
+}

@@ -1,0 +1,115 @@
+// In-memory fixture catalog. Used when DATABASE_URL is absent (local dev / preview).
+// Mirrors the shape of @datasetai/db AgentCard so swapping in real DB is mechanical.
+
+import type { AgentCard } from '@datasetai/db';
+
+export const FIXTURE_CATALOG: readonly AgentCard[] = [
+  {
+    id: 'voltagent/code-reviewer',
+    name: 'Code Reviewer',
+    description: 'Production-grade code review skill — catches bugs, suggests refactors, scores PRs.',
+    primaryFormat: 'claude-skill',
+    formats: ['claude-skill'],
+    toolCompatibility: ['claude-code'],
+    category: 'code-review',
+    tags: ['typescript', 'review', 'pr'],
+    license: 'MIT',
+    creatorLogin: 'voltagent',
+    sourceType: 'github-mirror',
+    installCount30d: 4280,
+    installCountLifetime: 18420,
+    updatedAt: new Date('2026-04-22T12:00:00Z'),
+  },
+  {
+    id: 'datasetai/sql-explorer',
+    name: 'SQL Explorer',
+    description: 'Natural-language SQL companion that introspects your schema and writes safe queries.',
+    primaryFormat: 'mcp-server',
+    formats: ['mcp-server'],
+    toolCompatibility: ['claude-desktop', 'cursor', 'claude-code'],
+    category: 'data',
+    tags: ['sql', 'database', 'mcp'],
+    license: 'Apache-2.0',
+    creatorLogin: 'datasetai',
+    sourceType: 'direct-publish',
+    installCount30d: 3105,
+    installCountLifetime: 9211,
+    updatedAt: new Date('2026-04-29T08:30:00Z'),
+  },
+  {
+    id: 'smithery/legal-redliner',
+    name: 'Legal Redliner',
+    description: 'Marks up contract diffs with risk callouts; pairs with your firm’s checklist.',
+    primaryFormat: 'claude-skill',
+    formats: ['claude-skill'],
+    toolCompatibility: ['claude-code'],
+    category: 'legal',
+    tags: ['contracts', 'redlining'],
+    license: 'BSL-1.1',
+    creatorLogin: 'smithery',
+    sourceType: 'smithery-mirror',
+    installCount30d: 1842,
+    installCountLifetime: 6710,
+    updatedAt: new Date('2026-04-19T17:45:00Z'),
+  },
+  {
+    id: 'datasetai/sales-ops',
+    name: 'Sales Ops Companion',
+    description: 'Drafts CRM updates, pipeline summaries, and forecast rationales.',
+    primaryFormat: 'mcp-server',
+    formats: ['mcp-server', 'claude-skill'],
+    toolCompatibility: ['claude-desktop', 'cursor'],
+    category: 'sales-ops',
+    tags: ['sales', 'crm', 'forecasting'],
+    license: 'MIT',
+    creatorLogin: 'datasetai',
+    sourceType: 'direct-publish',
+    installCount30d: 980,
+    installCountLifetime: 2410,
+    updatedAt: new Date('2026-04-28T10:15:00Z'),
+  },
+  {
+    id: 'voltagent/test-author',
+    name: 'Test Author',
+    description: 'Generates Vitest/Playwright suites for the file you’re editing.',
+    primaryFormat: 'claude-skill',
+    formats: ['claude-skill'],
+    toolCompatibility: ['claude-code', 'cursor'],
+    category: 'testing',
+    tags: ['testing', 'vitest', 'playwright'],
+    license: 'MIT',
+    creatorLogin: 'voltagent',
+    sourceType: 'github-mirror',
+    installCount30d: 2710,
+    installCountLifetime: 8820,
+    updatedAt: new Date('2026-04-25T14:00:00Z'),
+  },
+];
+
+export interface FixtureCreator {
+  readonly username: string;
+  readonly displayName: string;
+  readonly bio: string;
+  readonly isVerifiedPublisher: boolean;
+}
+
+export const FIXTURE_CREATORS: Readonly<Record<string, FixtureCreator>> = {
+  voltagent: {
+    username: 'voltagent',
+    displayName: 'VoltAgent',
+    bio: 'Open-source AI agent collective focused on developer tooling.',
+    isVerifiedPublisher: true,
+  },
+  datasetai: {
+    username: 'datasetai',
+    displayName: 'datasetai',
+    bio: 'First-party agents from datasetai.xyz.',
+    isVerifiedPublisher: true,
+  },
+  smithery: {
+    username: 'smithery',
+    displayName: 'Smithery',
+    bio: 'Curating the best agents in the wild.',
+    isVerifiedPublisher: false,
+  },
+};

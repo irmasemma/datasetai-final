@@ -1,0 +1,39 @@
+{
+  "name": "datasetai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "npm for AI agents — install Claude Skills, MCP servers, and other agent definition files into any AI tool",
+  "main": "src/index.ts",
+  "bin": {
+    "datasetai": "bin/datasetai.ts"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsx watch bin/datasetai.ts",
+    "start": "tsx bin/datasetai.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@datasetai/api-client": "workspace:*",
+    "@datasetai/core": "workspace:*",
+    "@datasetai/format-adapters": "workspace:*",
+    "commander": "^14.0.3",
+    "tar": "^7.5.13"
+  },
+  "devDependencies": {
+    "@datasetai/eslint-config": "workspace:*",
+    "@datasetai/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "@types/tar": "^7.0.87",
+    "eslint": "^9.17.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

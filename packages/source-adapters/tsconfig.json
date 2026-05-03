@@ -1,0 +1,7 @@
+{
+  "extends": "@datasetai/tsconfig/base.json",
+  "compilerOptions": {
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"]
+}

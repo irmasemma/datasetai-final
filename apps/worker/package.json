@@ -1,0 +1,31 @@
+{
+  "name": "@datasetai/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@datasetai/config": "workspace:*",
+    "@datasetai/core": "workspace:*",
+    "@datasetai/db": "workspace:*",
+    "@datasetai/format-adapters": "workspace:*",
+    "@datasetai/source-adapters": "workspace:*",
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "@datasetai/eslint-config": "workspace:*",
+    "@datasetai/tsconfig": "workspace:*",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
