@@ -82,6 +82,13 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       className={`${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var d=window.matchMedia('(prefers-color-scheme: dark)');var h=document.documentElement;function s(){if(d.matches){h.classList.add('dark')}else{h.classList.remove('dark')}}s();d.addEventListener('change',s)}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="flex min-h-screen flex-col bg-background font-sans text-foreground antialiased">
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         <NextIntlClientProvider messages={messages}>
