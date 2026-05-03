@@ -74,7 +74,7 @@ const PLANS: ReadonlyArray<Plan> = [
 
 export default function PricingPage() {
   return (
-    <main className="space-y-16">
+    <div className="space-y-16">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: 'Home', url: '/' },
@@ -103,7 +103,7 @@ export default function PricingPage() {
             className={
               'relative flex flex-col rounded-xl border bg-card p-6 ' +
               (plan.highlight
-                ? 'border-brand-500/60 shadow-[0_0_0_1px_oklch(0.66_0.18_200/0.4)]'
+                ? 'border-brand-500/60 shadow-[0_0_0_1px_oklch(0.6_0.16_200/0.4)]'
                 : 'border-border')
             }
           >
@@ -112,7 +112,7 @@ export default function PricingPage() {
                 className={
                   'absolute -top-3 left-6 rounded-full px-2.5 py-0.5 text-[11px] font-medium uppercase tracking-wider ' +
                   (plan.highlight
-                    ? 'bg-brand-500 text-background'
+                    ? 'bg-brand-700 text-background'
                     : 'bg-muted text-muted-foreground')
                 }
               >
@@ -182,6 +182,6 @@ export default function PricingPage() {
           percentage of every install — to keep the long tail viable.
         </p>
       </section>
-    </main>
+    </div>
   );
 }
