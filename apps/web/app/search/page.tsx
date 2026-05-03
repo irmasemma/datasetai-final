@@ -3,7 +3,8 @@ import { CatalogGrid } from '../../components/CatalogGrid';
 import { Filters } from '../../components/Filters';
 
 export const metadata = {
-  title: 'Search — datasetai.xyz',
+  title: 'Search',
+  alternates: { canonical: '/search' },
 };
 
 type SearchParams = Readonly<Record<string, string | undefined>>;
@@ -23,7 +24,7 @@ export default async function SearchPage(props: { searchParams: Promise<SearchPa
   ]);
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <form action="/search" className="flex gap-2">
         <input
           type="search"
@@ -31,11 +32,11 @@ export default async function SearchPage(props: { searchParams: Promise<SearchPa
           defaultValue={query}
           placeholder="Search agents…"
           aria-label="Search agents"
-          className="w-full rounded border border-neutral-300 bg-white px-3 py-2 text-sm focus:border-neutral-900 focus:outline-none dark:border-neutral-700 dark:bg-neutral-950 dark:focus:border-neutral-50"
+          className="w-full rounded border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-brand-500 focus:outline-none"
         />
         <button
           type="submit"
-          className="rounded bg-neutral-900 px-4 py-2 text-sm font-medium text-white dark:bg-neutral-50 dark:text-neutral-900"
+          className="rounded bg-foreground px-4 py-2 text-sm font-medium text-background"
         >
           Search
         </button>
@@ -49,11 +50,11 @@ export default async function SearchPage(props: { searchParams: Promise<SearchPa
               {results.length} result{results.length === 1 ? '' : 's'} for “{query}”
             </h1>
           ) : (
-            <p className="text-sm text-neutral-500">Type a query above to find agents.</p>
+            <p className="text-sm text-muted-foreground">Type a query above to find agents.</p>
           )}
           {query && <CatalogGrid agents={results} />}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

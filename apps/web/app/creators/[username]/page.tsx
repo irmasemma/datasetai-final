@@ -13,10 +13,11 @@ interface Params {
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { username } = await params;
   const page = await getCreatorPage(username);
-  if (!page) return { title: 'Creator not found — datasetai.xyz' };
+  if (!page) return { title: 'Creator not found' };
   return {
-    title: `${page.creator.displayName} — datasetai.xyz`,
+    title: page.creator.displayName,
     description: page.creator.bio || `Agents by ${page.creator.displayName}.`,
+    alternates: { canonical: `/creators/${username}` },
   };
 }
 
@@ -26,7 +27,7 @@ export default async function CreatorPage({ params }: { params: Promise<Params> 
   if (!page) notFound();
   const totalInstalls = page.agents.reduce((acc, a) => acc + a.installCountLifetime, 0);
   return (
-    <main className="space-y-8">
+    <div className="space-y-8">
       <JsonLd
         data={[
           publisherJsonLd(page.creator),
@@ -41,19 +42,19 @@ export default async function CreatorPage({ params }: { params: Promise<Params> 
         <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
           {page.creator.displayName}
           {page.creator.isVerifiedPublisher && (
-            <span className="rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+            <span className="rounded bg-brand-500/15 px-2 py-0.5 text-xs font-medium text-brand-500">
               verified
             </span>
           )}
         </h1>
         {page.creator.bio && (
-          <p className="text-lg text-neutral-600 dark:text-neutral-400">{page.creator.bio}</p>
+          <p className="text-lg text-muted-foreground">{page.creator.bio}</p>
         )}
-        <p className="text-sm text-neutral-500">
+        <p className="text-sm text-muted-foreground">
           {page.agents.length} agents · {totalInstalls.toLocaleString()} lifetime installs
         </p>
       </header>
       <CatalogGrid agents={page.agents} />
-    </main>
+    </div>
   );
 }

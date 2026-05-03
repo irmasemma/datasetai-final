@@ -47,7 +47,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: SITE.legalName,
-    url: SITE_URL,
     title: `${SITE.legalName} — ${SITE.tagline}`,
     description: SITE.description,
   },

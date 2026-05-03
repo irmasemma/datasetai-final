@@ -11,8 +11,9 @@ interface Params {
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
   return {
-    title: `#${slug} — datasetai.xyz`,
+    title: `#${slug}`,
     description: `Agents tagged ${slug}.`,
+    alternates: { canonical: `/tags/${slug}` },
   };
 }
 
@@ -21,10 +22,10 @@ export default async function TagPage({ params }: { params: Promise<Params> }) {
   const agents = await listAgents({ tag: slug, sort: 'most-installed', limit: 100 });
   if (agents.length === 0) notFound();
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <h1 className="text-2xl font-semibold">#{slug}</h1>
-      <p className="text-sm text-neutral-500">{agents.length} agents with this tag.</p>
+      <p className="text-sm text-muted-foreground">{agents.length} agents with this tag.</p>
       <CatalogGrid agents={agents} />
-    </main>
+    </div>
   );
 }

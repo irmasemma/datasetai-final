@@ -38,14 +38,14 @@ export function websiteJsonLd(): Json {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${SITE_URL}/agents?q={search_term_string}`,
+        urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
   };
 }
 
-export function softwareApplicationJsonLd(card: AgentCard): Json {
+export function softwareApplicationJsonLd(card: AgentCard, version?: string): Json {
   return {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -55,7 +55,7 @@ export function softwareApplicationJsonLd(card: AgentCard): Json {
     applicationCategory: 'DeveloperApplication',
     operatingSystem: 'Cross-platform',
     url: absoluteUrl(`/agents/${card.id}`),
-    softwareVersion: 'latest',
+    softwareVersion: version,
     license: card.license ?? undefined,
     keywords: card.tags.join(', '),
     dateModified: card.updatedAt.toISOString(),
@@ -66,20 +66,6 @@ export function softwareApplicationJsonLd(card: AgentCard): Json {
           url: absoluteUrl(`/creators/${card.creatorLogin}`),
         }
       : undefined,
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    aggregateRating:
-      card.installCountLifetime >= 100
-        ? {
-            '@type': 'AggregateRating',
-            ratingValue: '5',
-            ratingCount: Math.max(1, Math.round(card.installCountLifetime / 100)),
-            bestRating: '5',
-          }
-        : undefined,
     interactionStatistic: {
       '@type': 'InteractionCounter',
       interactionType: 'https://schema.org/InstallAction',

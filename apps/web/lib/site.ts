@@ -4,9 +4,7 @@ const RAW =
   process.env['NEXT_PUBLIC_SITE_URL'] ??
   process.env['SITE_URL'] ??
   (process.env['VERCEL_URL'] ? `https://${process.env['VERCEL_URL']}` : null) ??
-  (process.env['NODE_ENV'] === 'production'
-    ? 'https://datasetai.xyz'
-    : 'http://localhost:3000');
+  'https://datasetai.xyz';
 
 export const SITE_URL = RAW.replace(/\/$/, '');
 
