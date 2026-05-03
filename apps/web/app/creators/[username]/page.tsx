@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
 import { getCreatorPage } from '../../../lib/catalog';
 import { CatalogGrid } from '../../../components/CatalogGrid';
+import { JsonLd } from '../../../components/JsonLd';
+import { publisherJsonLd, breadcrumbJsonLd } from '../../../lib/jsonld';
 
 export const revalidate = 60;
 
@@ -25,6 +27,16 @@ export default async function CreatorPage({ params }: { params: Promise<Params> 
   const totalInstalls = page.agents.reduce((acc, a) => acc + a.installCountLifetime, 0);
   return (
     <main className="space-y-8">
+      <JsonLd
+        data={[
+          publisherJsonLd(page.creator),
+          breadcrumbJsonLd([
+            { name: 'Home', url: '/' },
+            { name: 'Publishers', url: '/agents' },
+            { name: page.creator.displayName, url: `/creators/${page.creator.username}` },
+          ]),
+        ]}
+      />
       <header className="space-y-3">
         <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
           {page.creator.displayName}

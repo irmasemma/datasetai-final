@@ -6,6 +6,11 @@ import { getDb } from '../../../lib/db';
 import { ReportButton } from '../../../components/ReportButton';
 import { SourceBadge } from '../../../components/SourceBadge';
 import { VerifiedBadge } from '../../../components/VerifiedBadge';
+import { JsonLd } from '../../../components/JsonLd';
+import {
+  softwareApplicationJsonLd,
+  breadcrumbJsonLd,
+} from '../../../lib/jsonld';
 
 export const revalidate = 60;
 
@@ -55,6 +60,16 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
 
   return (
     <main className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_18rem]">
+      <JsonLd
+        data={[
+          softwareApplicationJsonLd(card),
+          breadcrumbJsonLd([
+            { name: 'Home', url: '/' },
+            { name: 'Agents', url: '/agents' },
+            { name: card.name, url: `/agents/${card.id}` },
+          ]),
+        ]}
+      />
       <article className="space-y-6">
         <header className="space-y-3">
           <div className="flex items-center gap-2">
