@@ -9,7 +9,7 @@ import { ALLOWED_LICENSES } from '@datasetai/format-adapters';
 import { PublishForm } from './PublishForm';
 import { TosForm } from './TosForm';
 
-export const metadata = { title: 'Publish — datasetai.xyz' };
+export const metadata = { title: 'Publish' };
 
 export default async function PublishPage() {
   const session = await getSession();
@@ -17,10 +17,10 @@ export default async function PublishPage() {
   const db = getDb();
   if (!db) {
     return (
-      <main className="prose dark:prose-invert">
+      <div className="prose dark:prose-invert">
         <h1>Publish</h1>
         <p>Database is not configured. Set DATABASE_URL to enable publishing.</p>
-      </main>
+      </div>
     );
   }
   const user = await findUserById(db, session.userId);
@@ -30,7 +30,7 @@ export default async function PublishPage() {
     !user.acceptedTosAt || !user.acceptedPrivacyAt || !user.acceptedCreatorAgreementAt;
 
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold">Publish an agent</h1>
         <p className="text-neutral-500">
@@ -49,6 +49,6 @@ export default async function PublishPage() {
       ) : (
         <PublishForm licenses={ALLOWED_LICENSES} />
       )}
-    </main>
+    </div>
   );
 }

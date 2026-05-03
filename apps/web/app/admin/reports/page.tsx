@@ -11,7 +11,7 @@ export default async function AdminReportsPage() {
   const db = getDb();
   const list = db ? await listPendingReports(db) : [];
   return (
-    <main className="space-y-4">
+    <div className="space-y-4">
       <header>
         <h1 className="text-2xl font-bold">Pending reports</h1>
         <p className="text-sm text-neutral-500">{list.length} open</p>
@@ -46,6 +46,6 @@ export default async function AdminReportsPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
 }

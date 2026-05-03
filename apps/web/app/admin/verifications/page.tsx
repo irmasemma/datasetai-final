@@ -10,7 +10,7 @@ export const metadata = { title: 'Verifications — admin' };
 export default async function AdminVerificationsPage() {
   await requireAdminPage('/admin/verifications');
   const db = getDb();
-  if (!db) return <main>Database not configured.</main>;
+  if (!db) return <div>Database not configured.</div>;
   const rows = await db
     .select({
       id: verificationApplications.id,
@@ -25,7 +25,7 @@ export default async function AdminVerificationsPage() {
     .orderBy(desc(verificationApplications.createdAt))
     .limit(50);
   return (
-    <main className="space-y-3">
+    <div className="space-y-3">
       <h1 className="text-2xl font-bold">Verification queue</h1>
       <ul className="space-y-2">
         {rows.map((r) => (
@@ -54,6 +54,6 @@ export default async function AdminVerificationsPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
 }

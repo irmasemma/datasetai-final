@@ -45,7 +45,7 @@ const PRINCIPLES: ReadonlyArray<Principle> = [
 
 export default function AboutPage() {
   return (
-    <main className="space-y-16">
+    <div className="space-y-16">
       <JsonLd
         data={breadcrumbJsonLd([
           { name: 'Home', url: '/' },
@@ -102,6 +102,6 @@ export default function AboutPage() {
           </Link>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

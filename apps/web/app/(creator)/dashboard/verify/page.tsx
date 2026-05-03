@@ -7,13 +7,13 @@ import { verificationApplications } from '@datasetai/db';
 import { desc, eq } from 'drizzle-orm';
 import { VerifyForm } from './VerifyForm';
 
-export const metadata = { title: 'Verify publisher — datasetai.xyz' };
+export const metadata = { title: 'Verify publisher' };
 
 export default async function VerifyPage() {
   const session = await getSession();
   if (!session) redirect('/api/auth/github?next=/dashboard/verify');
   const db = getDb();
-  if (!db) return <main>Database not configured.</main>;
+  if (!db) return <div>Database not configured.</div>;
   const apps = await db
     .select()
     .from(verificationApplications)
@@ -21,7 +21,7 @@ export default async function VerifyPage() {
     .orderBy(desc(verificationApplications.createdAt))
     .limit(5);
   return (
-    <main className="space-y-4">
+    <div className="space-y-4">
       <header>
         <h1 className="text-2xl font-bold">Apply for verified publisher</h1>
         <p className="text-sm text-neutral-500">
@@ -42,6 +42,6 @@ export default async function VerifyPage() {
           </ul>
         </section>
       )}
-    </main>
+    </div>
   );
 }

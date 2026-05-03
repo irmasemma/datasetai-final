@@ -19,7 +19,6 @@ const COLUMNS: ReadonlyArray<FooterColumn> = [
       { label: 'Browse agents', href: '/agents' },
       { label: 'Categories', href: '/categories' },
       { label: 'Pricing', href: '/pricing' },
-      { label: 'CLI', href: '/docs/cli' },
     ],
   },
   {
@@ -27,14 +26,12 @@ const COLUMNS: ReadonlyArray<FooterColumn> = [
     links: [
       { label: 'Publish an agent', href: '/publish' },
       { label: 'Claim a listing', href: '/agents' },
-      { label: 'Verified publisher', href: '/docs/verified-publisher' },
       { label: 'Creator dashboard', href: '/dashboard/agents' },
     ],
   },
   {
     heading: 'Resources',
     links: [
-      { label: 'Documentation', href: '/docs' },
       { label: 'About', href: '/about' },
       { label: 'Status', href: 'https://status.datasetai.xyz', external: true },
       {
@@ -42,16 +39,6 @@ const COLUMNS: ReadonlyArray<FooterColumn> = [
         href: SITE.github,
         external: true,
       },
-    ],
-  },
-  {
-    heading: 'Legal',
-    links: [
-      { label: 'Terms of Service', href: '/legal/terms' },
-      { label: 'Privacy Policy', href: '/legal/privacy' },
-      { label: 'Creator Agreement', href: '/legal/creator-agreement' },
-      { label: 'Mirror Policy', href: '/legal/mirror-policy' },
-      { label: 'DMCA', href: '/legal/dmca' },
     ],
   },
 ];
@@ -65,7 +52,7 @@ export function SiteFooter() {
       className="mt-24 border-t border-border bg-muted/40"
     >
       <div className="mx-auto max-w-6xl px-6 py-12">
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4">
           <div className="col-span-2 space-y-3 sm:col-span-3 md:col-span-1">
             <Link
               href="/"

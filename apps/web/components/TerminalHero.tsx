@@ -102,7 +102,7 @@ export function TerminalHero() {
         role="tablist"
         aria-label="Target AI tool"
         id={tabsId}
-        className="flex flex-wrap gap-1 border-b border-border px-3 py-2"
+        className="flex gap-1 overflow-x-auto border-b border-border px-3 py-2"
       >
         {TOOLS.map((t) => {
           const selected = active === t.id;
@@ -116,7 +116,7 @@ export function TerminalHero() {
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(t.id)}
               className={
-                'rounded-md px-2.5 py-1 font-mono text-xs transition-colors ' +
+                'whitespace-nowrap rounded-md px-2.5 py-1 font-mono text-xs transition-colors ' +
                 (selected
                   ? 'bg-brand-500/15 text-brand-500'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground')
@@ -135,11 +135,13 @@ export function TerminalHero() {
         aria-labelledby={tabsId}
         className="space-y-1.5 px-5 py-5 font-mono text-[13px] leading-relaxed sm:text-sm"
       >
-        <div className="flex items-baseline gap-2">
-          <span className="select-none text-brand-500" aria-hidden>
-            $
-          </span>
-          <span className="text-foreground">{command}</span>
+        <div className="overflow-x-auto">
+          <div className="flex items-baseline gap-2">
+            <span className="select-none text-brand-500" aria-hidden>
+              $
+            </span>
+            <span className="whitespace-nowrap text-foreground">{command}</span>
+          </div>
         </div>
         <div className="text-muted-foreground">
           <span className="text-brand-500" aria-hidden>

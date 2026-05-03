@@ -25,12 +25,12 @@ export function TrustStrip({ stats }: { stats: Stats }) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="flex flex-col items-center gap-1 bg-card px-4 py-6 text-center sm:py-8"
+          className="flex min-w-0 flex-col items-center gap-1 bg-card px-4 py-6 text-center sm:py-8"
         >
           <div className="font-mono text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
             {item.value}
           </div>
-          <div className="text-xs uppercase tracking-wide text-muted-foreground sm:text-sm">
+          <div className="whitespace-nowrap text-[10px] uppercase tracking-wide text-muted-foreground sm:text-sm">
             {item.label}
           </div>
         </div>

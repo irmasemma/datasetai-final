@@ -38,7 +38,7 @@ export default async function HomePage(props: {
   };
 
   return (
-    <main className="space-y-16">
+    <div className="space-y-16">
       <section className="grid grid-cols-1 items-center gap-10 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-12 lg:pt-8">
         <div className="space-y-6">
           <Link
@@ -46,7 +46,7 @@ export default async function HomePage(props: {
             className="inline-flex items-center gap-2 rounded-full border border-border bg-muted/40 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-brand-500/40 hover:text-foreground"
           >
             <span className="size-1.5 rounded-full bg-brand-500" aria-hidden />
-            Format-agnostic. Cross-tool. Coming with creator economy.
+            Format-agnostic. Cross-tool. Coming with the creator economy.
           </Link>
 
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
@@ -54,8 +54,8 @@ export default async function HomePage(props: {
           </h1>
 
           <p className="max-w-xl text-lg text-muted-foreground sm:text-xl">
-            One registry for Claude Skills, MCP servers, and the agent definition files that come
-            next. One CLI to install them in whichever tool you use.
+            One registry for Claude Skills, MCP servers, AGENTS.md, .cursorrules, and every format
+            that comes next. One CLI to install them in whichever tool you use.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -124,6 +124,6 @@ export default async function HomePage(props: {
           <CatalogGrid agents={agents} />
         </div>
       </section>
-    </main>
+    </div>
   );
 }

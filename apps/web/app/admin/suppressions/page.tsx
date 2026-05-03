@@ -12,7 +12,7 @@ export default async function AdminSuppressionsPage() {
   const db = getDb();
   const list = db ? await listSuppressions(db) : [];
   return (
-    <main className="space-y-6">
+    <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Suppressions</h1>
         <p className="text-sm text-neutral-500">
@@ -54,6 +54,6 @@ export default async function AdminSuppressionsPage() {
           ))}
         </tbody>
       </table>
-    </main>
+    </div>
   );
 }

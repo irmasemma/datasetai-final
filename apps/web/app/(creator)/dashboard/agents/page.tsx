@@ -7,7 +7,7 @@ import { listAgentsByCreatorId, installMetrics } from '@datasetai/db';
 import { getSession } from '../../../../lib/auth';
 import { getDb } from '../../../../lib/db';
 
-export const metadata = { title: 'Your agents — datasetai.xyz' };
+export const metadata = { title: 'Your agents' };
 export const revalidate = 60;
 
 export default async function DashboardAgentsPage() {
@@ -16,10 +16,10 @@ export default async function DashboardAgentsPage() {
   const db = getDb();
   if (!db) {
     return (
-      <main>
+      <div>
         <h1 className="text-2xl font-bold">Your agents</h1>
         <p>Database not configured.</p>
-      </main>
+      </div>
     );
   }
 
@@ -27,7 +27,7 @@ export default async function DashboardAgentsPage() {
   const metrics = await Promise.all(ownAgents.map((a) => installMetrics(db, a.id)));
 
   return (
-    <main className="space-y-4">
+    <div className="space-y-4">
       <header>
         <h1 className="text-2xl font-bold">Your agents</h1>
         <p className="text-sm text-neutral-500">{ownAgents.length} listings</p>
@@ -72,7 +72,7 @@ export default async function DashboardAgentsPage() {
           );
         })}
       </ul>
-    </main>
+    </div>
   );
 }
 

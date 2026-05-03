@@ -11,7 +11,7 @@ export default async function AdminClaimsPage() {
   const db = getDb();
   const list = db ? await listClaimRequests(db) : [];
   return (
-    <main className="space-y-3">
+    <div className="space-y-3">
       <h1 className="text-2xl font-bold">Pending listing claims</h1>
       <ul className="space-y-2">
         {list.map((c) => (
@@ -42,6 +42,6 @@ export default async function AdminClaimsPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </div>
   );
 }
