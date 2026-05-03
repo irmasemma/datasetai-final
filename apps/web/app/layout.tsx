@@ -98,9 +98,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             Skip to main content
           </a>
           <SiteHeader />
-          <div id="main" className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
+          <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
             {children}
-          </div>
+          </main>
           <SiteFooter />
         </NextIntlClientProvider>
       </body>
