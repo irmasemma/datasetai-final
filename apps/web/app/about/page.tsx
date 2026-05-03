@@ -54,7 +54,7 @@ export default function AboutPage() {
       />
 
       <header className="space-y-5 pt-4">
-        <p className="font-mono text-xs uppercase tracking-wider text-brand-500">
+        <p className="font-mono text-xs uppercase tracking-wider text-brand">
           About {SITE.legalName}
         </p>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">

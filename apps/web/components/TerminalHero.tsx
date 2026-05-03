@@ -61,7 +61,7 @@ export function TerminalHero() {
             <>
               <svg
                 viewBox="0 0 16 16"
-                className="size-3.5 text-brand-500"
+                className="size-3.5 text-brand"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
@@ -118,7 +118,7 @@ export function TerminalHero() {
               className={
                 'whitespace-nowrap rounded-md px-2.5 py-1 font-mono text-xs transition-colors ' +
                 (selected
-                  ? 'bg-brand-500/15 text-brand-500'
+                  ? 'bg-brand-500/15 text-brand'
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground')
               }
             >
@@ -137,27 +137,27 @@ export function TerminalHero() {
       >
         <div className="overflow-x-auto">
           <div className="flex items-baseline gap-2">
-            <span className="select-none text-brand-500" aria-hidden>
+            <span className="select-none text-brand" aria-hidden>
               $
             </span>
             <span className="whitespace-nowrap text-foreground">{command}</span>
           </div>
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand-500" aria-hidden>
+          <span className="text-brand" aria-hidden>
             ✓
           </span>{' '}
           Detected target: <span className="text-foreground">{tool.id}</span> ({tool.detect})
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand-500" aria-hidden>
+          <span className="text-brand" aria-hidden>
             ✓
           </span>{' '}
           Resolved <span className="text-foreground">{SAMPLE_AGENT}</span>@1.4.0 — signed
           manifest verified
         </div>
         <div className="text-muted-foreground">
-          <span className="text-brand-500" aria-hidden>
+          <span className="text-brand" aria-hidden>
             ✓
           </span>{' '}
           Wrote 1 file to{' '}

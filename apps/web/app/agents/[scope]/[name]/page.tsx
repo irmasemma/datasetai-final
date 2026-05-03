@@ -168,7 +168,7 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
             >
               {creator.displayName}
               {creator.isVerifiedPublisher && (
-                <span className="ml-2 rounded bg-brand-500/15 px-1.5 py-0.5 text-[10px] font-medium text-brand-500">
+                <span className="ml-2 rounded bg-brand-500/15 px-1.5 py-0.5 text-[10px] font-medium text-brand">
                   verified
                 </span>
               )}

@@ -42,7 +42,7 @@ export default async function CreatorPage({ params }: { params: Promise<Params> 
         <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
           {page.creator.displayName}
           {page.creator.isVerifiedPublisher && (
-            <span className="rounded bg-brand-500/15 px-2 py-0.5 text-xs font-medium text-brand-500">
+            <span className="rounded bg-brand-500/15 px-2 py-0.5 text-xs font-medium text-brand">
               verified
             </span>
           )}

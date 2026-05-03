@@ -68,7 +68,7 @@ export function TrendingRail({ title, subtitle, href, agents, emptyLabel }: Rail
                       ? `${a.creatorLogin}/${a.id.split('/').pop()}`
                       : a.id}
                   </p>
-                  <h3 className="truncate font-semibold text-foreground group-hover:text-brand-500">
+                  <h3 className="truncate font-semibold text-foreground group-hover:text-brand">
                     {a.name}
                   </h3>
                 </div>
@@ -83,7 +83,7 @@ export function TrendingRail({ title, subtitle, href, agents, emptyLabel }: Rail
                 <span className="inline-flex items-center gap-1.5">
                   <svg
                     viewBox="0 0 12 12"
-                    className="size-3 text-brand-500"
+                    className="size-3 text-brand"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.6"

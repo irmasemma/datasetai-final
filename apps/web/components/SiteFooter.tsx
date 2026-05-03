@@ -60,7 +60,7 @@ export function SiteFooter() {
             >
               <span
                 aria-hidden
-                className="inline-flex size-7 items-center justify-center rounded-md border border-brand-500/40 bg-brand-500/10 font-mono text-xs text-brand-500"
+                className="inline-flex size-7 items-center justify-center rounded-md border border-brand-500/40 bg-brand-500/10 font-mono text-xs text-brand"
               >
                 d/
               </span>

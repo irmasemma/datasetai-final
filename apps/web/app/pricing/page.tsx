@@ -83,7 +83,7 @@ export default function PricingPage() {
       />
 
       <header className="space-y-4 pt-4 text-center">
-        <p className="font-mono text-xs uppercase tracking-wider text-brand-500">
+        <p className="font-mono text-xs uppercase tracking-wider text-brand">
           Pricing
         </p>
         <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -138,7 +138,7 @@ export default function PricingPage() {
                 <li key={feature} className="flex items-start gap-2">
                   <svg
                     viewBox="0 0 16 16"
-                    className="mt-1 size-3.5 shrink-0 text-brand-500"
+                    className="mt-1 size-3.5 shrink-0 text-brand"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
