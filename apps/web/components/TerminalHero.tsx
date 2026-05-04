@@ -44,7 +44,7 @@ export function TerminalHero() {
       {/* Header — branch indicator + copy */}
       <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
         <div className="flex items-center gap-2 font-mono text-[11px] text-muted-foreground">
-          <span className="inline-flex size-1.5 rounded-full bg-brand-500" aria-hidden />
+          <span className="inline-flex size-1.5 bg-brand-500" aria-hidden />
           ~/your-project
           <span className="text-border" aria-hidden>·</span>
           <span className="text-foreground">main</span>
@@ -152,7 +152,7 @@ export function TerminalHero() {
             ✓
           </span>{' '}
           target → <span className="text-foreground">{tool.id}</span>{' '}
-          <span className="text-muted-foreground/70">({tool.detect})</span>
+          <span className="text-muted-foreground">({tool.detect})</span>
         </div>
         <div className="text-muted-foreground">
           <span className="select-none text-brand" aria-hidden>

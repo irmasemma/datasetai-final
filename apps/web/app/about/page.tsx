@@ -55,7 +55,7 @@ export default function AboutPage() {
 
       {/* Hero */}
       <header className="space-y-6 pt-6 sm:pt-12">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           about · {SITE.legalName}
         </p>
         <h1 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.04em] text-foreground sm:text-6xl lg:text-7xl">
@@ -77,32 +77,48 @@ export default function AboutPage() {
         aria-label="Principles"
         className="border-y border-border"
       >
-        {PRINCIPLES.map((p, idx) => (
-          <article
-            key={p.number}
-            className={
-              'grid grid-cols-1 items-start gap-6 px-0 py-10 sm:py-14 md:grid-cols-[6rem_1fr] ' +
-              (idx > 0 ? 'border-t border-border' : '')
-            }
-          >
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
-              {p.number}
-            </p>
-            <div className="space-y-3">
-              <h2 className="text-2xl font-bold leading-tight tracking-[-0.03em] text-foreground sm:text-3xl lg:text-4xl">
-                {p.heading}
-              </h2>
-              <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                {p.body}
+        {PRINCIPLES.map((p, idx) => {
+          const isLead = idx === 0;
+          return (
+            <article
+              key={p.number}
+              className={
+                'grid grid-cols-1 items-start gap-6 px-0 md:grid-cols-[6rem_1fr] ' +
+                (isLead ? 'py-12 sm:py-16' : 'py-8 sm:py-10') +
+                (idx > 0 ? ' border-t border-border' : '')
+              }
+            >
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+                {p.number}
               </p>
-            </div>
-          </article>
-        ))}
+              <div className="space-y-3">
+                <h2
+                  className={
+                    isLead
+                      ? 'text-2xl font-bold leading-tight tracking-[-0.03em] text-foreground sm:text-3xl lg:text-4xl'
+                      : 'text-xl font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-2xl'
+                  }
+                >
+                  {p.heading}
+                </h2>
+                <p
+                  className={
+                    isLead
+                      ? 'max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg'
+                      : 'max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base'
+                  }
+                >
+                  {p.body}
+                </p>
+              </div>
+            </article>
+          );
+        })}
       </section>
 
       {/* The window — pull quote */}
       <section className="space-y-8">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           the window
         </p>
         <blockquote className="max-w-3xl text-2xl font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-3xl lg:text-[2.5rem] lg:leading-[1.15]">
@@ -114,20 +130,9 @@ export default function AboutPage() {
         <div className="flex flex-wrap items-center gap-x-5 gap-y-3 pt-4">
           <Link
             href="/agents"
-            className="group inline-flex items-center gap-2 bg-foreground px-5 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-px"
+            className="inline-flex items-center bg-foreground px-5 py-3 text-sm font-semibold text-background transition-transform hover:-translate-y-px"
           >
-            Browse the registry
-            <svg
-              viewBox="0 0 16 16"
-              className="size-3.5 transition-transform group-hover:translate-x-0.5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="square"
-              aria-hidden
-            >
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
+            Browse the registry&nbsp;→
           </Link>
           <Link
             href="/publish"

@@ -138,7 +138,11 @@ export default async function ListingPage({ params }: { params: Promise<Params> 
           <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Install
           </h3>
-          <pre className="mt-2 overflow-x-auto rounded bg-foreground p-3 text-xs text-background">
+          <pre
+            tabIndex={0}
+            className="mt-2 overflow-x-auto rounded bg-foreground p-3 text-xs text-background"
+            aria-label="Install command"
+          >
             {installCmd}
           </pre>
         </section>

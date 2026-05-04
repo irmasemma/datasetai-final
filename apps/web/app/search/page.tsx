@@ -25,6 +25,7 @@ export default async function SearchPage(props: { searchParams: Promise<SearchPa
 
   return (
     <div className="space-y-6">
+      <h1 className="sr-only">{query ? `Search results for ${query}` : 'Search agents'}</h1>
       <form action="/search" className="flex gap-2">
         <input
           type="search"
@@ -46,9 +47,9 @@ export default async function SearchPage(props: { searchParams: Promise<SearchPa
         <Filters basePath="/search" current={{ ...params, q: query }} categories={categories} />
         <div className="space-y-4">
           {query ? (
-            <h1 className="text-xl font-semibold">
-              {results.length} result{results.length === 1 ? '' : 's'} for “{query}”
-            </h1>
+            <p className="text-xl font-semibold" aria-live="polite">
+              {results.length} result{results.length === 1 ? '' : 's'} for &ldquo;{query}&rdquo;
+            </p>
           ) : (
             <p className="text-sm text-muted-foreground">Type a query above to find agents.</p>
           )}

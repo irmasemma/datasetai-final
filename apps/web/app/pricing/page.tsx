@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Fragment } from 'react';
 import Link from 'next/link';
 import { JsonLd } from '../../components/JsonLd';
 import { breadcrumbJsonLd } from '../../lib/jsonld';
@@ -86,7 +87,8 @@ const COMPARISON: ReadonlyArray<{ section: string; rows: ReadonlyArray<Compariso
 function Cell({ value }: { value: string | boolean }) {
   if (value === true) {
     return (
-      <span aria-label="Included" className="inline-flex">
+      <span className="inline-flex">
+        <span className="sr-only">Included</span>
         <svg
           viewBox="0 0 16 16"
           className="size-4 text-brand"
@@ -102,7 +104,12 @@ function Cell({ value }: { value: string | boolean }) {
     );
   }
   if (value === false || value === '—') {
-    return <span aria-hidden className="text-muted-foreground/50">—</span>;
+    return (
+      <>
+        <span className="sr-only">Not included</span>
+        <span aria-hidden className="text-muted-foreground">—</span>
+      </>
+    );
   }
   return (
     <span className="font-mono text-[11px] uppercase tracking-wider text-foreground">
@@ -123,7 +130,7 @@ export default function PricingPage() {
 
       {/* Hero */}
       <header className="space-y-6 pt-6 sm:pt-12">
-        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           pricing
         </p>
         <h1 className="text-5xl font-extrabold leading-[0.95] tracking-[-0.04em] text-foreground sm:text-6xl">
@@ -132,8 +139,15 @@ export default function PricingPage() {
           earn the audience.
         </h1>
         <p className="max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-          Discovery is free forever. Publishing is free in MVP. The creator-economy paid tier
-          ships with Phase 2 — founding creators keep <span className="text-foreground font-semibold">90%</span> for six months. Flat platform fee, never per-install.
+          Discovery is free forever. Publishing is free in MVP.
+        </p>
+        <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          Phase 2 platform fee:{' '}
+          <span className="font-mono font-semibold text-foreground">20%</span> flat. Founding
+          cohort:{' '}
+          <span className="font-mono font-semibold text-foreground">10%</span> for the first
+          six months.{' '}
+          <span className="text-foreground">Never per-install.</span>
         </p>
       </header>
 
@@ -202,7 +216,7 @@ export default function PricingPage() {
             <thead>
               <tr className="border-b border-border">
                 <th scope="col" className="py-3 pr-4 text-left text-xs font-mono uppercase tracking-wider text-muted-foreground">
-                  &nbsp;
+                  <span className="sr-only">Feature</span>
                 </th>
                 {TIERS.map((t) => (
                   <th
@@ -217,10 +231,10 @@ export default function PricingPage() {
             </thead>
             <tbody>
               {COMPARISON.map((group) => (
-                <>
-                  <tr key={`h-${group.section}`}>
+                <Fragment key={group.section}>
+                  <tr>
                     <th
-                      scope="rowgroup"
+                      scope="colgroup"
                       colSpan={4}
                       className="bg-muted/40 px-0 pb-2 pt-6 text-left font-mono text-[11px] uppercase tracking-wider text-brand"
                     >
@@ -240,7 +254,7 @@ export default function PricingPage() {
                       ))}
                     </tr>
                   ))}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

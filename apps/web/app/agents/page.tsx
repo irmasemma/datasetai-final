@@ -30,6 +30,7 @@ export default async function CatalogPage(props: {
       <Filters basePath="/agents" current={params} categories={categories} />
       <div className="space-y-4">
         <h1 className="text-2xl font-semibold">All agents</h1>
+        <h2 className="sr-only">Agent listings</h2>
         <CatalogGrid agents={agents} />
       </div>
     </div>

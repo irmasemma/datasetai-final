@@ -54,6 +54,7 @@ export default async function CreatorPage({ params }: { params: Promise<Params> 
           {page.agents.length} agents · {totalInstalls.toLocaleString()} lifetime installs
         </p>
       </header>
+      <h2 className="sr-only">Published agents</h2>
       <CatalogGrid agents={page.agents} />
     </div>
   );

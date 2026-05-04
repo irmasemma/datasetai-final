@@ -13,12 +13,12 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
         <Link
           href="/"
-          className="group inline-flex items-baseline gap-2 font-semibold tracking-tight"
+          className="group inline-flex items-baseline gap-2 font-semibold tracking-[-0.02em]"
           aria-label="datasetai.xyz home"
         >
           <span
             aria-hidden
-            className="inline-flex size-6 items-center justify-center bg-foreground font-mono text-[11px] font-bold text-background"
+            className="inline-flex size-7 items-center justify-center border border-brand-500 bg-background font-mono text-[11px] font-bold text-foreground transition-colors group-hover:bg-brand-500/10"
           >
             d/
           </span>
@@ -37,11 +37,11 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Link
             href="/search"
-            className="hidden items-center gap-2 border border-border bg-card px-2.5 py-1.5 font-mono text-[11px] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground sm:inline-flex"
-            aria-label="Search agents"
+            className="group hidden size-8 items-center justify-center border border-border bg-card text-muted-foreground transition-colors hover:border-foreground hover:text-foreground sm:inline-flex"
+            aria-label="Search the registry · ⌘K"
           >
             <svg
               viewBox="0 0 16 16"
@@ -55,16 +55,15 @@ export function SiteHeader() {
               <circle cx="7" cy="7" r="4.5" />
               <path d="m13 13-2.5-2.5" />
             </svg>
-            Search the registry
-            <kbd className="border border-border bg-background px-1 text-[10px] font-medium">
+            <kbd className="ml-1.5 hidden border border-border bg-background px-1 font-mono text-[10px] font-medium group-hover:inline-block group-focus-visible:inline-block">
               ⌘K
             </kbd>
           </Link>
           <Link
             href="/publish"
-            className="bg-foreground px-3 py-1.5 text-sm font-semibold text-background transition-transform hover:-translate-y-px"
+            className="text-sm font-semibold text-foreground underline decoration-brand decoration-2 underline-offset-[6px] transition-colors hover:text-brand"
           >
-            Publish
+            Publish →
           </Link>
         </div>
       </div>
