@@ -26,6 +26,10 @@ export interface AlirezarezvaniAdapterOptions {
   readonly token?: string;
 }
 
+// Names that appear as files inside skill directories but are not actual skills
+// (template scaffolding, contributor docs, repo-level READMEs).
+const META_NAMES = new Set(['readme', 'template', '_template', 'example', '.template']);
+
 export function extractSkillFolders(tree: readonly TreeEntry[]): string[] {
   const folders = new Set<string>();
   for (const entry of tree) {
@@ -33,7 +37,11 @@ export function extractSkillFolders(tree: readonly TreeEntry[]): string[] {
     if (!entry.path.toLowerCase().endsWith('skill.md')) continue;
     const parts = entry.path.split('/');
     if (parts.length < 2) continue;
-    folders.add(parts.slice(0, -1).join('/'));
+    const folder = parts.slice(0, -1).join('/');
+    // Skip folders whose final segment is a meta name (README, TEMPLATE, etc.)
+    const leaf = parts[parts.length - 2];
+    if (leaf && META_NAMES.has(leaf.toLowerCase())) continue;
+    folders.add(folder);
   }
   return Array.from(folders);
 }

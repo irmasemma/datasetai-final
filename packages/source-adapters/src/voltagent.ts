@@ -19,16 +19,37 @@ export interface VoltAgentAdapterOptions {
   readonly fetch?: FetchLike;
 }
 
-const ENTRY_LINE = /^[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*[-—:]?\s*(.*)$/;
+// Entry lines accept (in any combination):
+//   - [name](url) - desc
+//   - **[name](url)** - desc          ← VoltAgent's actual format (bold-wrapped names)
+//   - **[name](url)** — desc
+//   * [name](url): desc
+// We strip an optional **/__ wrapper around the link, and accept -, —, :, or none as the
+// separator before the description.
+const ENTRY_LINE =
+  /^[-*]\s+(?:\*\*|__)?\[([^\]]+)\]\(([^)]+)\)(?:\*\*|__)?\s*[-—:]?\s*(.*)$/;
+
+// Skip URLs that point inside the README itself (table-of-contents anchor links).
+function isExternalLink(url: string): boolean {
+  if (!url.startsWith('http')) return false;
+  // shields.io / awesome-badge / discord-badge / similar inline badges:
+  if (url.includes('img.shields.io')) return false;
+  if (url.includes('awesome.re')) return false;
+  return true;
+}
 
 export function parseVoltAgentReadme(markdown: string): Entry[] {
   const entries: Entry[] = [];
+  const seen = new Set<string>();
   for (const line of markdown.split(/\r?\n/)) {
     const m = ENTRY_LINE.exec(line);
     if (!m) continue;
     const [, name, url, desc] = m;
     if (!name || !url) continue;
-    if (!url.startsWith('http')) continue;
+    if (!isExternalLink(url)) continue;
+    // Some entries appear twice (table-of-contents + body section). Dedupe by URL.
+    if (seen.has(url)) continue;
+    seen.add(url);
     entries.push({ name: name.trim(), url: url.trim(), description: desc?.trim() ?? '' });
   }
   return entries;
