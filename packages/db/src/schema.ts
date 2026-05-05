@@ -77,6 +77,13 @@ export const agents = pgTable(
     installCountLifetime: bigint('install_count_lifetime', { mode: 'number' }).notNull().default(0),
     installCount30d: bigint('install_count_30d', { mode: 'number' }).notNull().default(0),
     searchRank: real('search_rank').notNull().default(0),
+    // Two-rating model: upstream is "social proof from the source repo" (cached
+    // GitHub stars), rating is our own from logged-in users (only shown when
+    // ratingCount >= 5 to avoid single-vote skew).
+    upstreamStars: integer('upstream_stars'),
+    upstreamStarsSyncedAt: timestamp('upstream_stars_synced_at', { withTimezone: true }),
+    ratingAvg: real('rating_avg'),
+    ratingCount: integer('rating_count').notNull().default(0),
   },
   (t) => ({
     searchRankIdx: index('agents_search_rank_idx').on(t.searchRank),

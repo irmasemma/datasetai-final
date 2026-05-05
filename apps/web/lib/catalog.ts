@@ -1,12 +1,14 @@
 // Catalog data layer for the web app. Tries the real DB first, falls back to fixtures.
 // All page-level Server Components import from this file — they never touch Drizzle directly.
 
+import { sql } from 'drizzle-orm';
 import {
   listAgents as dbListAgents,
   getAgentBySlug as dbGetAgentBySlug,
   searchAgents as dbSearchAgents,
   getAgentByCreator as dbGetAgentByCreator,
   listCategories as dbListCategories,
+  agents,
   type AgentCard,
   type CatalogFilters,
   type SearchResult,
@@ -181,6 +183,48 @@ export async function listCategories(): Promise<Array<{ category: string; count:
     return [...counts.entries()]
       .map(([category, count]) => ({ category, count }))
       .sort((a, b) => b.count - a.count);
+  }
+}
+
+export interface CatalogStats {
+  agents: number;
+  publishers: number;
+  installs30d: number;
+}
+
+// Real-count stats — bypasses the listAgents() limit-100 clamp by hitting
+// count(*) / sum() directly against the agents table.
+export async function getCatalogStats(): Promise<CatalogStats> {
+  const db = getDb();
+  if (!db) {
+    return {
+      agents: FIXTURE_CATALOG.length,
+      publishers: new Set(
+        FIXTURE_CATALOG.map((a) => a.creatorLogin).filter(Boolean),
+      ).size,
+      installs30d: FIXTURE_CATALOG.reduce((acc, a) => acc + a.installCount30d, 0),
+    };
+  }
+  try {
+    const [row] = await db
+      .select({
+        agents: sql<number>`count(*)::int`,
+        publishers: sql<number>`count(distinct ${agents.creatorId})::int`,
+        installs30d: sql<number>`coalesce(sum(${agents.installCount30d}), 0)::int`,
+      })
+      .from(agents)
+      .where(sql`${agents.unpublishedAt} IS NULL`);
+    return {
+      agents: row?.agents ?? 0,
+      publishers: row?.publishers ?? 0,
+      installs30d: row?.installs30d ?? 0,
+    };
+  } catch {
+    return {
+      agents: FIXTURE_CATALOG.length,
+      publishers: 0,
+      installs30d: 0,
+    };
   }
 }
 

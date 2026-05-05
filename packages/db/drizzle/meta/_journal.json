@@ -15,6 +15,13 @@
       "when": 1777819275842,
       "tag": "0001_neat_baron_strucker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778256000000,
+      "tag": "0002_two_ratings",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { listAgents } from '../lib/catalog';
+import { listAgents, getCatalogStats } from '../lib/catalog';
 import { AgentCard } from '../components/AgentCard';
 import { TerminalHero } from '../components/TerminalHero';
 import { TrustStrip } from '../components/TrustStrip';
@@ -9,19 +9,11 @@ import { TrendingRail } from '../components/TrendingRail';
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [trending, popular, allForStats] = await Promise.all([
+  const [trending, popular, stats] = await Promise.all([
     listAgents({ limit: 4, sort: 'most-installed' }),
     listAgents({ limit: 6, sort: 'most-installed' }),
-    listAgents({ limit: 5000, sort: 'most-installed' }),
+    getCatalogStats(),
   ]);
-
-  const stats = {
-    agents: allForStats.length,
-    publishers: new Set(
-      allForStats.map((a) => a.creatorLogin).filter((l): l is string => Boolean(l)),
-    ).size,
-    installs30d: allForStats.reduce((acc, a) => acc + a.installCount30d, 0),
-  };
 
   return (
     <div className="space-y-20 pb-8">
