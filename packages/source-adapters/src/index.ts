@@ -4,7 +4,9 @@
 export * from './types.js';
 export { sha256Hex } from './hash.js';
 export {
+  categoryFromHeading,
   createVoltAgentAdapter,
+  detectFormat,
   parseVoltAgentReadme,
   type VoltAgentAdapterOptions,
 } from './voltagent.js';
