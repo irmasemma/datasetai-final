@@ -1,15 +1,15 @@
-// Shared pglite bootstrap SQL — keeps tests independent of drizzle-kit migrations.
-// Mirrors packages/db/src/schema.ts including round-2 (E4-E7) tables.
-//
-// IMPORTANT: This is a TEST helper. The implementer's BOOTSTRAP_SQL in
-// packages/db/__tests__/schema.test.ts diverges from current schema (missing
-// accepted_tos_at columns) — that's a pre-existing implementer bug; we don't
-// touch it. Our tests use this helper.
+// PGlite client factory for local development. Provides a persistent, file-backed Postgres
+// database using PGlite — no external Postgres required. Data persists across restarts in the
+// specified dataDir. Schema is bootstrapped on first use (idempotent DDL).
 
 import { PGlite } from '@electric-sql/pglite';
 import { citext } from '@electric-sql/pglite/contrib/citext';
+import { drizzle } from 'drizzle-orm/pglite';
+import { mkdirSync } from 'node:fs';
+import * as schema from './schema.js';
+import type { Database } from './client.js';
 
-export const TEST_BOOTSTRAP_SQL = `
+const BOOTSTRAP_SQL = `
   CREATE EXTENSION IF NOT EXISTS citext;
 
   CREATE TABLE IF NOT EXISTS users (
@@ -197,8 +197,26 @@ export const TEST_BOOTSTRAP_SQL = `
   CREATE INDEX IF NOT EXISTS moderation_notifications_user_idx ON moderation_notifications (user_id);
 `;
 
-export async function bootstrapPglite(): Promise<PGlite> {
-  const pg = await PGlite.create({ extensions: { citext } });
-  await pg.exec(TEST_BOOTSTRAP_SQL);
-  return pg;
+let cached: { db: Database; pg: PGlite } | null = null;
+
+/**
+ * Create a persistent PGlite-backed Drizzle database for local development.
+ * Schema is bootstrapped automatically (idempotent). The returned db is type-compatible
+ * with the production Database type so all queries work unchanged.
+ *
+ * @param dataDir — filesystem directory for PGlite data persistence
+ */
+export async function createPgliteDb(dataDir: string): Promise<{
+  db: Database;
+  close: () => Promise<void>;
+}> {
+  if (cached) return { db: cached.db, close: () => cached!.pg.close() };
+
+  mkdirSync(dataDir, { recursive: true });
+  const pg = await PGlite.create({ dataDir, extensions: { citext } });
+  await pg.exec(BOOTSTRAP_SQL);
+  const db = drizzle(pg, { schema }) as unknown as Database;
+
+  cached = { db, pg };
+  return { db, close: () => pg.close() };
 }

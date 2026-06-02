@@ -271,6 +271,9 @@ importers:
       '@datasetai/core':
         specifier: workspace:*
         version: link:../core
+      '@electric-sql/pglite':
+        specifier: ^0.4.5
+        version: 0.4.5
       drizzle-orm:
         specifier: ^0.45.2
         version: 0.45.2(@electric-sql/pglite@0.4.5)(@types/pg@8.20.0)(postgres@3.4.9)

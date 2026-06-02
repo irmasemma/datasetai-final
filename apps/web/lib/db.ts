@@ -1,5 +1,5 @@
-// Server-side Database singleton. Gracefully no-ops when DATABASE_URL is missing so the
-// catalog pages still render with the in-memory fixtures (apps/web/lib/fixtures.ts).
+// Server-side Database singleton. Uses real Postgres when DATABASE_URL is set, otherwise
+// the catalog layer falls back to fixtures (which include mirrored data when available).
 
 import { createDb, type Database } from '@datasetai/db';
 

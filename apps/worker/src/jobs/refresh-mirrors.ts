@@ -94,9 +94,18 @@ export async function refreshMirrors(deps: RefreshMirrorsDeps): Promise<RefreshM
             .set({
               name: normalized.name,
               description: normalized.description,
+              longDescription: normalized.longDescription ?? null,
               tags: [...normalized.tags],
+              primaryFormat: normalized.primaryFormat,
+              formats: [...normalized.formats],
+              toolCompatibility: [...normalized.toolCompatibility],
               license: normalized.license,
               category: normalized.category ?? null,
+              sourceUrl: normalized.sourceUrl,
+              sourceAttribution: {
+                ...(normalized.authorHandle ? { authorHandle: normalized.authorHandle } : {}),
+                mirroredAt: new Date().toISOString(),
+              },
               updatedAt: new Date(),
             })
             .where(eq(agents.id, normalized.id));

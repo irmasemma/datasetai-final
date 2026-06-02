@@ -6,3 +6,4 @@ export const PACKAGE = '@datasetai/db' as const;
 export * from './schema.js';
 export * from './client.js';
 export * from './queries.js';
+export { createPgliteDb } from './pglite-client.js';

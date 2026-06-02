@@ -8,7 +8,7 @@ import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AgentCard } from '../components/AgentCard.js';
 import { CatalogGrid } from '../components/CatalogGrid.js';
-import { FIXTURE_CATALOG } from '../lib/fixtures.js';
+import { FIXTURE_CATALOG, DEMO_FIXTURES } from '../lib/fixtures.js';
 
 describe('catalog: AgentCard component (Story E2.1)', () => {
   const sample = FIXTURE_CATALOG[0]!;
@@ -49,8 +49,8 @@ describe('catalog: AgentCard component (Story E2.1)', () => {
 
 describe('catalog: CatalogGrid component (Story E2.1)', () => {
   it('renders one card per agent', () => {
-    render(<CatalogGrid agents={FIXTURE_CATALOG} />);
-    for (const agent of FIXTURE_CATALOG) {
+    render(<CatalogGrid agents={DEMO_FIXTURES} />);
+    for (const agent of DEMO_FIXTURES) {
       expect(screen.getByText(agent.name)).toBeInTheDocument();
     }
   });
@@ -61,7 +61,7 @@ describe('catalog: CatalogGrid component (Story E2.1)', () => {
   });
 
   it('exposes an aria-label on the list for screen readers (NFR-ACC-2)', () => {
-    render(<CatalogGrid agents={FIXTURE_CATALOG} />);
+    render(<CatalogGrid agents={DEMO_FIXTURES} />);
     expect(screen.getByLabelText(/agent catalog/i)).toBeInTheDocument();
   });
 });

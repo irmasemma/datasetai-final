@@ -119,7 +119,7 @@ export function createPromptsChatAdapter(
         longDescription: r.prompt,
         primaryFormat: 'system-prompt',
         formats: ['system-prompt'],
-        toolCompatibility: [],
+        toolCompatibility: ['claude-code', 'chatgpt', 'cursor', 'gemini-cli'],
         category: 'prompt',
         tags: ['prompt', 'mirror'],
         license: 'CC0-1.0',

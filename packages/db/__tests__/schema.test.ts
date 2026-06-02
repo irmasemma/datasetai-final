@@ -81,7 +81,11 @@ const BOOTSTRAP_SQL = `
     unpublished_at TIMESTAMPTZ,
     install_count_lifetime BIGINT NOT NULL DEFAULT 0,
     install_count_30d BIGINT NOT NULL DEFAULT 0,
-    search_rank REAL NOT NULL DEFAULT 0
+    search_rank REAL NOT NULL DEFAULT 0,
+    upstream_stars INTEGER,
+    upstream_stars_synced_at TIMESTAMPTZ,
+    rating_avg REAL,
+    rating_count INTEGER NOT NULL DEFAULT 0
   );
   CREATE INDEX IF NOT EXISTS agents_search_rank_idx ON agents (search_rank);
   CREATE INDEX IF NOT EXISTS agents_creator_idx ON agents (creator_id);

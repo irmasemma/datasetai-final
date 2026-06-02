@@ -45,6 +45,9 @@ desktop.ini
 *.tsbuildinfo
 .eslintcache
 
+# Local data (PGlite, content storage)
+var/
+
 # BMAD framework — installable via `npx bmad-method install --modules bmm --tools claude-code`
 # Not committed (would just be vendored boilerplate)
 _bmad/
@@ -53,3 +56,4 @@ _bmad/
 
 .vercel
 .env*.local
+.env*

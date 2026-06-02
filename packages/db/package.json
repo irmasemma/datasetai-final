@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@datasetai/core": "workspace:*",
+    "@electric-sql/pglite": "^0.4.5",
     "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.9"
   },

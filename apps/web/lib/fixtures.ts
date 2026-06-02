@@ -1,9 +1,14 @@
 // In-memory fixture catalog. Used when DATABASE_URL is absent (local dev / preview).
 // Mirrors the shape of @datasetai/db AgentCard so swapping in real DB is mechanical.
+//
+// When mirrored data exists at ../../var/mirror-catalog.json (written by scripts/mirror-local.ts),
+// it is loaded and merged with the hardcoded demo fixtures.
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import type { AgentCard } from '@datasetai/db';
-
-export const FIXTURE_CATALOG: readonly AgentCard[] = [
+
+export const DEMO_FIXTURES: readonly AgentCard[] = [
   {
     id: 'voltagent/code-reviewer',
     name: 'Code Reviewer',
@@ -85,6 +90,39 @@ export const FIXTURE_CATALOG: readonly AgentCard[] = [
     updatedAt: new Date('2026-04-25T14:00:00Z'),
   },
 ];
+
+function loadMirroredCatalog(): AgentCard[] {
+  try {
+    // Try multiple resolution strategies (monorepo root vs app root)
+    const candidates = [
+      resolve(process.cwd(), 'var/mirror-catalog.json'),       // from monorepo root
+      resolve(process.cwd(), '../../var/mirror-catalog.json'),  // from apps/web/
+    ];
+    for (const p of candidates) {
+      try {
+        const raw = readFileSync(p, 'utf-8');
+        const items = JSON.parse(raw) as Array<Record<string, unknown>>;
+        console.log(`[fixtures] Loaded ${items.length} mirrored agents from ${p}`);
+        return items.map((item) => ({
+          ...item,
+          updatedAt: new Date(item['updatedAt'] as string),
+        })) as unknown as AgentCard[];
+      } catch { /* try next */ }
+    }
+    return [];
+  } catch {
+    return [];
+  }
+}
+
+const mirrored = loadMirroredCatalog();
+
+// Deduplicate: mirrored agents with IDs matching demo fixtures are skipped
+const demoIds = new Set(DEMO_FIXTURES.map((d) => d.id));
+const dedupedMirrored = mirrored.filter((m) => !demoIds.has(m.id));
+
+export const FIXTURE_CATALOG: readonly AgentCard[] =
+  dedupedMirrored.length > 0 ? [...DEMO_FIXTURES, ...dedupedMirrored] : DEMO_FIXTURES;
 
 export interface FixtureCreator {
   readonly username: string;

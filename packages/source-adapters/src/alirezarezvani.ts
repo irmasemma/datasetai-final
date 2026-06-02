@@ -89,7 +89,7 @@ export function createAlirezarezvaniAdapter(
         description: `Mirrored Claude skill from alirezarezvani/claude-skills (${l.path}).`,
         primaryFormat: 'claude-skill',
         formats: ['claude-skill'],
-        toolCompatibility: ['claude-code'],
+        toolCompatibility: ['claude-code', 'openai-codex', 'cursor', 'gemini-cli', 'aider'],
         category: 'mirrored',
         tags: ['claude-skill', 'mirror'],
         license: 'MIT',
