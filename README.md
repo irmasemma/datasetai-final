@@ -38,12 +38,24 @@ datasetai/
 
 - Node ≥ 22 (`.nvmrc` → 22)
 - pnpm ≥ 10 (auto-resolved via `packageManager` field; `corepack enable` if needed)
+- Vercel CLI (`npm i -g vercel`) — used to pull DB credentials on first checkout
 
-**Install**
+**Fresh-machine onboarding (clone → running dev server)**
 
 ```bash
+git clone https://github.com/irmasemma/datasetai-final.git
+cd datasetai-final
 pnpm install
+vercel login                                    # browser auth
+vercel link --yes --project datasetai-final-web
+vercel env pull apps/web/.env.local             # downloads dev branch DB URL
+pnpm -F @datasetai/web dev                      # http://localhost:3006
 ```
+
+Vercel is the source of truth for secrets — no env file is committed. Local dev
+connects to a Neon "dev" branch (copy-on-write fork of production), so writes
+never touch real user data. See [`CLAUDE.md`](CLAUDE.md) for the full
+deployment topology, env-var routing, and Neon branch strategy.
 
 **Common scripts**
 
