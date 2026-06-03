@@ -1,7 +1,7 @@
 // Migration runner. Run via `pnpm -F @datasetai/db migrate` after generating with drizzle-kit.
 
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 import { createDb } from './client.js';
 
@@ -23,7 +23,7 @@ export async function runMigrations(options: RunMigrationsOptions): Promise<void
 }
 
 const isMain =
-  import.meta.url === `file://${process.argv[1]?.replace(/\\/g, '/') ?? ''}`;
+  import.meta.url === pathToFileURL(process.argv[1] ?? '').href;
 if (isMain) {
   const url = process.env['DATABASE_URL'];
   if (!url) {
