@@ -50,3 +50,6 @@ desktop.ini
 _bmad/
 .claude/
 
+
+.vercel
+.env*.local
