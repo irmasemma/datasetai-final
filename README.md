@@ -48,14 +48,22 @@ cd datasetai-final
 pnpm install
 vercel login                                    # browser auth
 vercel link --yes --project datasetai-final-web
-vercel env pull apps/web/.env.local             # downloads dev branch DB URL
+vercel env pull apps/web/.env.local             # for Next.js (pnpm dev)
+vercel env pull .env                            # for packages/db migrations
 pnpm -F @datasetai/web dev                      # http://localhost:3006
 ```
+
+After each `vercel env pull`, open the file and remove any BOM at the start of
+the value, surrounding double-quotes, and a trailing literal `\n` inside the
+quotes — Vercel's CLI writes this format and `postgres-js` rejects it with
+`ERR_INVALID_URL`. A clean line is `DATABASE_URL=postgresql://...` with no
+quotes and no `\n`.
 
 Vercel is the source of truth for secrets — no env file is committed. Local dev
 connects to a Neon "dev" branch (copy-on-write fork of production), so writes
 never touch real user data. See [`CLAUDE.md`](CLAUDE.md) for the full
-deployment topology, env-var routing, and Neon branch strategy.
+deployment topology, env-var routing, password-rotation procedure, and Neon
+branch strategy.
 
 **Common scripts**
 
