@@ -46,7 +46,10 @@ export type SourceId =
   | 'smithery-mirror'
   | 'skillsmp-mirror'
   | 'prompts-chat-mirror'
-  | 'cursor-directory-mirror';
+  | 'cursor-directory-mirror'
+  | 'anthropic-marketplace'
+  | 'composio-mirror'
+  | 'travisvn-mirror';
 
 export interface AgentRef {
   readonly id: string;

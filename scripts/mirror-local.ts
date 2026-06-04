@@ -23,6 +23,9 @@ import {
   createAlirezarezvaniAdapter,
   createPromptsChatAdapter,
   createSmitheryAdapter,
+  createAnthropicMarketplaceAdapter,
+  createComposioAdapter,
+  createTravisvnAdapter,
 } from '../packages/source-adapters/src/index.js';
 import { refreshMirrors } from '../apps/worker/src/jobs/refresh-mirrors.js';
 import * as schema from '../packages/db/src/schema.js';
@@ -54,8 +57,11 @@ async function main() {
 
   // Build adapter list
   const adapters = [
+    createAnthropicMarketplaceAdapter(),
     createVoltAgentAdapter(),
     createAlirezarezvaniAdapter(),
+    createComposioAdapter(),
+    createTravisvnAdapter(),
     createPromptsChatAdapter(),
     ...(process.env['SMITHERY_REGISTRY_URL'] ? [createSmitheryAdapter()] : []),
   ];

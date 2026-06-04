@@ -125,3 +125,47 @@ Expect `OK tables: 12` against either `main` or `dev`. To explicitly check old-p
 - Workspace packages export TS source directly (`"main": "./src/index.ts"`) — Next.js transpiles them on the fly via `transpilePackages` in `apps/web/next.config.mjs` (Architecture AD-1). No pre-build step required.
 - Drizzle uses `postgres-js` driver. Connection factory at [`packages/db/src/client.ts`](packages/db/src/client.ts) — pure DI, callers pass URL.
 - Tests use real examples (pglite, real Ed25519, tmpdir FS, local HTTP fixtures), not mocks.
+
+## Mirror pipeline
+
+The mirror pipeline ingests agents from upstream sources into the database. As of 2026-06-04:
+**3,641 agents** from 6 sources.
+
+### Source adapters (`packages/source-adapters/src/`)
+
+| Adapter | Source | Count | Format |
+|---------|--------|------:|--------|
+| `anthropic-marketplace.ts` | Anthropic official plugin marketplace (JSON) | 212 | claude-skill |
+| `voltagent.ts` | VoltAgent/awesome-agent-skills (README) | 1,087 | claude-skill |
+| `alirezarezvani.ts` | alirezarezvani/claude-skills (GitHub API) | 412 | claude-skill |
+| `composio.ts` | ComposioHQ/awesome-claude-skills (README) | 71 | claude-skill |
+| `travisvn.ts` | travisvn/awesome-claude-skills (README) | 31 | claude-skill |
+| `promptschat.ts` | prompts.chat (CSV) | 1,828 | system-prompt |
+| `smithery.ts` | Smithery.ai (gated, needs `SMITHERY_REGISTRY_URL`) | — | mcp-server |
+
+### Scripts
+
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `scripts/mirror-local.ts` | Run all adapters, write to PGlite or Neon | `--neon` for Neon dev branch |
+| `scripts/dedup-agents.ts` | Cross-source deduplication (3-layer: URL, name, Jaccard) | `--apply` to delete dupes |
+| `scripts/reclassify-agents.ts` | Update agent categories using keyword classifier | Always safe to re-run |
+| `scripts/classify-category.ts` | Keyword-based category classifier (26 categories) | Imported by mirror + reclassify |
+
+### Adding a new source adapter
+
+1. Create `packages/source-adapters/src/<name>.ts` implementing `SourceAdapter`
+2. Export from `packages/source-adapters/src/index.ts`
+3. Add the `SourceId` to `packages/core/src/index.ts`
+4. Wire into `scripts/mirror-local.ts` adapter array
+5. Add source priority to `scripts/dedup-agents.ts` `SOURCE_PRIORITY`
+6. Run mirror → dedup → reclassify
+7. Add tests in `packages/source-adapters/__tests__/<name>.test.ts`
+
+### Full pipeline run
+
+```bash
+pnpm --filter @datasetai/worker exec tsx ../../scripts/mirror-local.ts --neon
+pnpm --filter @datasetai/worker exec tsx ../../scripts/dedup-agents.ts --apply
+pnpm --filter @datasetai/worker exec tsx ../../scripts/reclassify-agents.ts
+```

@@ -1,7 +1,7 @@
 # Development Log — datasetai.xyz
 
 > Living document for agents and contributors to understand what's been done, what's working, and what's next.
-> Updated: 2026-05-29
+> Updated: 2026-06-04
 
 ---
 
@@ -230,21 +230,110 @@ The classifier runs during JSON export in `mirror-local.ts`, replacing the gener
 
 | Source | Count |
 |--------|------:|
-| prompts.chat | 1,834 |
-| VoltAgent/awesome-agent-skills | 1,112 |
-| alirezarezvani/claude-skills | 418 |
-| **Total** | **3,364** |
+| prompts.chat | 1,828 |
+| VoltAgent/awesome-agent-skills | 1,087 |
+| alirezarezvani/claude-skills | 412 |
+| Anthropic Official Marketplace | 212 |
+| ComposioHQ/awesome-claude-skills | 71 |
+| travisvn/awesome-claude-skills | 31 |
+| **Total** | **3,641** |
 
 ### Adding a new category
 Edit `scripts/classify-category.ts`:
 1. Add the category name to the `CATEGORIES` array
 2. Add a `Rule` entry with a regex and weight (higher weight = higher priority)
-3. Re-run `scripts/mirror-local.ts` to reclassify
+3. Re-run `scripts/reclassify-agents.ts` to update categories in Neon
 
 ### Next steps for future agents
-- **More source adapters needed** to reach 10K target (see supply-bootstrap-plan)
-- **Smithery adapter** exists but needs `SMITHERY_REGISTRY_URL` env var
-- **Missing adapters:** Superpowers (94K⭐), Everything Claude Code (100K+⭐), travisvn, ComposioHQ, daymade, Glama.ai, PulseMCP, MCP.so
+- **Tier 2 adapters** to reach 10K target: daymade, netresearch, glebis, phuryn/pm-skills, bmad-code-org
+- **Tier 3 MCP registries** (metadata-only): Smithery (adapter exists, needs `SMITHERY_REGISTRY_URL`), Glama.ai (21K+), PulseMCP (11.8K+), MCP.so (19.7K+)
 - **Category refinement:** classifier uses keyword heuristics — consider LLM-based classification for better accuracy
 - **Agent descriptions:** alirezarezvani entries have generic "Mirrored Claude skill from..." descriptions — could fetch actual README content
 - **Install counts:** all mirrored agents have 0 installs — need a popularity signal (GitHub stars, npm downloads)
+- **CLI wiring:** `apps/cli` has real install/search/list/uninstall logic, needs `/api/v1/search` route + CDN pipeline
+
+---
+
+## Session: 2026-06-04 — Tier 1 completion, dedup engine, Neon integration
+
+### What was done
+
+#### 1. Neon dev branch integration
+- Installed Vercel CLI, linked project (`datasetai-final-web`)
+- Pulled dev credentials via `vercel env pull` (with BOM/quote fix per CLAUDE.md gotcha)
+- Updated `scripts/mirror-local.ts` to support `--neon` flag for direct Neon writes
+- Verified connection: 12 tables, schema intact
+
+#### 2. Three new Tier 1 source adapters
+
+| File | Source | Agents | Notes |
+|------|--------|-------:|-------|
+| `packages/source-adapters/src/anthropic-marketplace.ts` | Anthropic official plugin marketplace | 212 | Structured JSON, highest quality |
+| `packages/source-adapters/src/composio.ts` | ComposioHQ/awesome-claude-skills | 77 (71 after dedup) | README bullet-link parsing |
+| `packages/source-adapters/src/travisvn.ts` | travisvn/awesome-claude-skills | 31 (31 after dedup) | README bullet-link parsing |
+
+#### 3. Cross-source deduplication engine
+Created `scripts/dedup-agents.ts` — 3-layer hybrid dedup:
+
+| Layer | Method | Catches |
+|-------|--------|---------|
+| 1 | sourceUrl exact match (cross-source only) | Same GitHub repo from different adapters |
+| 2 | Normalized name match (cross-source only) | `Code Reviewer` vs `code-reviewer` |
+| 3 | Jaccard token similarity ≥ 0.85 (cross-source only) | Fuzzy near-matches |
+
+**Priority system** (higher priority source wins ties):
+1. anthropic-marketplace
+2. voltagent-mirror
+3. composio-mirror / travisvn-mirror
+4. github-mirror (alirezarezvani)
+5. prompts-chat-mirror
+6. smithery-mirror
+
+**Key design:** Only deduplicates across different sources, never within the same adapter. Dry-run mode by default (`--apply` to delete).
+
+#### 4. Category reclassification
+Created `scripts/reclassify-agents.ts` — updates categories in Neon DB using the keyword classifier from `scripts/classify-category.ts`. Run after mirroring to apply 26 meaningful categories.
+
+#### 5. Schema fixes
+Added missing columns (`upstream_stars`, `upstream_stars_synced_at`, `rating_avg`, `rating_count`) to:
+- `tests/helpers/pg-bootstrap.ts`
+- `packages/db/src/pglite-client.ts`
+- `packages/db/__tests__/schema.test.ts`
+- `packages/db/__tests__/queries.test.ts`
+
+#### 6. Git push fix
+Resolved `irmasemma_microsoft` (EMU) → `irmasemma` (personal) auth mismatch via `gh auth login` re-authentication.
+
+### Files changed
+
+| File | Change |
+|------|--------|
+| `packages/source-adapters/src/anthropic-marketplace.ts` | **New** — Anthropic official marketplace adapter |
+| `packages/source-adapters/src/composio.ts` | **New** — ComposioHQ adapter |
+| `packages/source-adapters/src/travisvn.ts` | **New** — travisvn adapter |
+| `packages/source-adapters/src/index.ts` | Export new adapters |
+| `packages/core/src/index.ts` | Added `anthropic-marketplace`, `composio-mirror`, `travisvn-mirror` to `SourceId` |
+| `scripts/mirror-local.ts` | Added `--neon` flag, wired 6 adapters, imports `createDb` |
+| `scripts/dedup-agents.ts` | **New** — cross-source dedup engine |
+| `scripts/reclassify-agents.ts` | **New** — category reclassifier for Neon |
+| `tests/helpers/pg-bootstrap.ts` | Added `upstream_stars`, `rating_avg`, `rating_count` columns |
+| `packages/db/src/pglite-client.ts` | Same schema fix |
+| `packages/db/__tests__/schema.test.ts` | Same schema fix |
+| `packages/db/__tests__/queries.test.ts` | Same schema fix |
+
+### Running the full pipeline
+
+```bash
+# 1. Mirror all sources to Neon dev branch
+pnpm --filter @datasetai/worker exec tsx ../../scripts/mirror-local.ts --neon
+
+# 2. Deduplicate cross-source overlaps (dry run first)
+pnpm --filter @datasetai/worker exec tsx ../../scripts/dedup-agents.ts
+pnpm --filter @datasetai/worker exec tsx ../../scripts/dedup-agents.ts --apply
+
+# 3. Reclassify with meaningful categories
+pnpm --filter @datasetai/worker exec tsx ../../scripts/reclassify-agents.ts
+
+# 4. (Optional) Mirror locally for fixture-based dev
+pnpm --filter @datasetai/worker exec tsx ../../scripts/mirror-local.ts
+```

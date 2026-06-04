@@ -24,3 +24,15 @@ export {
   parseCsv,
   type PromptsChatAdapterOptions,
 } from './promptschat.js';
+export {
+  createAnthropicMarketplaceAdapter,
+  type AnthropicMarketplaceAdapterOptions,
+} from './anthropic-marketplace.js';
+export {
+  createComposioAdapter,
+  type ComposioAdapterOptions,
+} from './composio.js';
+export {
+  createTravisvnAdapter,
+  type TravisvnAdapterOptions,
+} from './travisvn.js';
