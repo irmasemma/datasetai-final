@@ -51,7 +51,8 @@ var/
 # BMAD framework — installable via `npx bmad-method install --modules bmm --tools claude-code`
 # Not committed (would just be vendored boilerplate)
 _bmad/
-.claude/
+.claude/*
+!.claude/skills/
 
 
 .vercel
